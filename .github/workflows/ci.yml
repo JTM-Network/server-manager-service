@@ -4,9 +4,6 @@ on:
   push:
     branches: [ 'main' ]
 
-env:
-  NAME: server-manager
-
 jobs:
   build:
     if: github.ref == 'refs/heads/main'
@@ -22,7 +19,6 @@ jobs:
     
     - name: Grant execute permissions for gradlew
       run: |-
-        cd $NAME
         chmod +x gradlew
     
     - name: Cache gradle packages
@@ -37,7 +33,6 @@ jobs:
     
     - name: Gradle build
       run: |-
-        cd $NAME
         ./gradlew build
         
     - name: Cleanup Gradle cache
