@@ -8,7 +8,6 @@ import org.springframework.web.reactive.HandlerMapping
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping
 import org.springframework.web.reactive.socket.WebSocketHandler
 
-
 @Configuration
 open class SocketConfiguration {
 
@@ -16,7 +15,6 @@ open class SocketConfiguration {
     open fun handlerMapping(): HandlerMapping {
         val map: MutableMap<String, WebSocketHandler> = HashMap()
         map["/manager"] = ServerSocketHandler()
-
 
         val handlerMapping = SimpleUrlHandlerMapping()
         handlerMapping.order = Ordered.HIGHEST_PRECEDENCE
