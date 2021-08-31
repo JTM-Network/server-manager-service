@@ -1,0 +1,27 @@
+server:
+  port: 8999
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: server-manager
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  profiles:
+    active: ${PROFILE}
+
+reactor:
+  ipc:
+    netty:
+      workerCount: 1
+
+sentry:
+  dsn: ${SERVICE_DSN}
+  traces-sample-rate: 1.0
+  logging:
+    minimum-event-level: INFO
+    minimum-breadcrumb-level: DEBUG
