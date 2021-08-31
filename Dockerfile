@@ -1,4 +1,4 @@
-FROM java:16
+FROM openjdk:16.0-slim
 VOLUME /tmp
 EXPOSE 8999
 ADD /build/libs/*.jar app.jar
