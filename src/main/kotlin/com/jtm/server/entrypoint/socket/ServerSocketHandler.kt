@@ -1,6 +1,7 @@
 package com.jtm.server.entrypoint.socket
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.jtm.server.core.domain.model.event.IncomingEvent
 import com.jtm.server.data.event.EventDispatcher
 import org.slf4j.LoggerFactory
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono
 class ServerSocketHandler @Autowired constructor(private val eventDispatcher: EventDispatcher): WebSocketHandler {
 
     private val logger = LoggerFactory.getLogger(ServerSocketHandler::class.java)
-    private val mapper = ObjectMapper()
+    private val mapper = ObjectMapper().registerModule(KotlinModule())
 
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(
