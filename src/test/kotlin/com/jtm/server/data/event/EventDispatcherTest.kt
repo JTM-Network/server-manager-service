@@ -22,7 +22,7 @@ class EventDispatcherTest {
     private val authenticationManager: AuthenticationManager = mock()
     private val eventDispatcher = EventDispatcher(eventAggregator, authenticationManager)
 
-    private val handler: EventHandler = mock()
+    private val handler: EventHandler<*> = mock()
     private val session: WebSocketSession = mock()
     private val event: IncomingEvent = mock()
 

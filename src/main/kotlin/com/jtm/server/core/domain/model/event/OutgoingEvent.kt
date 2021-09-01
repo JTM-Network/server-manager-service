@@ -2,7 +2,7 @@ package com.jtm.server.core.domain.model.event
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class OutgoingEvent(name: String, value: String): Event(name, value) {
+class OutgoingEvent(name: String): Event(name, "") {
 
     private val mapper = ObjectMapper()
 

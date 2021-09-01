@@ -16,10 +16,11 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
     private val mapper = ObjectMapper()
 
     override fun handle(session: WebSocketSession): Mono<Void> {
-        return session.send(session.receive()
+        session.receive()
             .flatMap {
                 eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java))
-                    .then(Mono.empty())
-            })
+            }
+
+        return Mono.empty()
     }
 }

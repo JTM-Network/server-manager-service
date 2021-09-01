@@ -7,19 +7,19 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
-abstract class EventHandler(private val clazz: Class<*>) {
+abstract class EventHandler<T>(private val clazz: Class<T>) {
 
     private val mapper = ObjectMapper()
 
-    abstract fun onEvent(session: WebSocketSession, value: Any): Mono<Void>
+    abstract fun onEvent(session: WebSocketSession, value: T): Mono<Void>
 
     fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<Void> {
         val value = getObject(event)
         return onEvent(session, value)
     }
 
-    private fun getObject(event: IncomingEvent): Any {
-         return event.getObject(clazz)
+    private fun getObject(event: IncomingEvent): T {
+        return mapper.readValue(event.value, clazz)
     }
 
     fun sendMessage(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): WebSocketMessage {
