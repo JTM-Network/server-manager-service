@@ -1,20 +1,26 @@
 package com.jtm.server.entrypoint.socket
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.jtm.server.core.domain.model.event.IncomingEvent
+import com.jtm.server.data.event.EventDispatcher
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketHandler
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
-class ServerSocketHandler: WebSocketHandler {
+@Component
+class ServerSocketHandler @Autowired constructor(private val eventDispatcher: EventDispatcher): WebSocketHandler {
 
-    private val logger = LoggerFactory.getLogger(ServerSocketHandler::class.java)
+    private val mapper = ObjectMapper()
 
     override fun handle(session: WebSocketSession): Mono<Void> {
-        return session.send(session.receive()
-            .map {
-                logger.info("Message: ${it.payloadAsText}")
-                session.textMessage("Echo: ${it.payloadAsText}")
-            })
+        session.receive()
+            .flatMap {
+                eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java))
+            }
+
+        return Mono.empty()
     }
 }
