@@ -22,7 +22,7 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
                 .flatMap {
                     logger.info("Message received. Handling socket message: ${it.payloadAsText}")
                     return@flatMap eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java))
-                }.then(Mono.empty())
+                }
         )
     }
 }

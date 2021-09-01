@@ -14,9 +14,9 @@ abstract class EventHandler<T>(private val clazz: Class<T>) {
     private val logger = LoggerFactory.getLogger(EventHandler::class.java)
     private val mapper = ObjectMapper()
 
-    abstract fun onEvent(session: WebSocketSession, value: T): Mono<Void>
+    abstract fun onEvent(session: WebSocketSession, value: T): Mono<WebSocketMessage>
 
-    fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<Void> {
+    fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
         logger.info("Handling event: ${event.name}")
         val value = getObject(event)
         return onEvent(session, value)
@@ -26,9 +26,9 @@ abstract class EventHandler<T>(private val clazz: Class<T>) {
         return mapper.readValue(event.value, clazz)
     }
 
-    fun sendMessage(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): WebSocketMessage {
+    fun sendMessage(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): Mono<WebSocketMessage> {
         val event = outgoingEvent.writeObject(value)
-        return session.textMessage(mapper.writeValueAsString(event))
+        return Mono.just(session.textMessage(mapper.writeValueAsString(event)))
     }
 
     fun sendEvent(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): Mono<Void> {
