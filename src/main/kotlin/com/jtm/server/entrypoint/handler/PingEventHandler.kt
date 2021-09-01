@@ -14,7 +14,6 @@ class PingEventHandler: EventHandler<PingPong>(PingPong::class.java) {
 
     override fun onEvent(session: WebSocketSession, value: PingPong): Mono<Void> {
         logger.info("Message received: ${value.value}")
-
         return sendEvent(session, OutgoingEvent("pong"), PingPong("pong"))
     }
 }
