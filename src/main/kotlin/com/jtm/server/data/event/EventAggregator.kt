@@ -1,7 +1,9 @@
 package com.jtm.server.data.event
 
 import com.jtm.server.core.usecase.event.EventHandler
-import com.jtm.server.entrypoint.handler.PingEventHandler
+import com.jtm.server.entrypoint.handler.ConnectedHandler
+import com.jtm.server.entrypoint.handler.DisconnectHandler
+import com.jtm.server.entrypoint.handler.PingHandler
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -12,7 +14,9 @@ class EventAggregator {
 
     @PostConstruct
     fun init() {
-        registerHandler("ping", PingEventHandler())
+        registerHandler("ping", PingHandler())
+        registerHandler("connect", ConnectedHandler())
+        registerHandler("disconnect", DisconnectHandler())
     }
 
     fun registerHandler(name: String, handler: EventHandler<*>) {

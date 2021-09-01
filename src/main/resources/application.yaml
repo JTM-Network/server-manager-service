@@ -23,5 +23,5 @@ sentry:
   dsn: ${SERVICE_DSN}
   traces-sample-rate: 1.0
   logging:
-    minimum-event-level: INFO
+    minimum-event-level: DEBUG
     minimum-breadcrumb-level: DEBUG
