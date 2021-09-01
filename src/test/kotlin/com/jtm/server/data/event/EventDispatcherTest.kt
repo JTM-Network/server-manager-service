@@ -74,7 +74,7 @@ class EventDispatcherTest {
     fun dispatchTest() {
         `when`(eventAggregator.getHandler(anyString())).thenReturn(handler)
         `when`(authenticationManager.authenticate(anyString())).thenReturn(true)
-        `when`(handler.onEvent(anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
+        `when`(handler.handleEvent(anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
 
         val returned = eventDispatcher.dispatch(session, event)
 
@@ -84,7 +84,7 @@ class EventDispatcherTest {
         verify(eventAggregator, times(1)).getHandler(anyString())
         verifyNoMoreInteractions(eventAggregator)
 
-        verify(handler, times(1)).onEvent(anyOrNull(), anyOrNull())
+        verify(handler, times(1)).handleEvent(anyOrNull(), anyOrNull())
         verifyNoMoreInteractions(handler)
 
         StepVerifier.create(returned)
