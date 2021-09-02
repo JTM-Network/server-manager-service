@@ -19,7 +19,7 @@ abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
     fun handleEvent(session: WebSocketSession, incomingEvent: IncomingEvent): Mono<WebSocketMessage> {
         logger.info("Received event.")
         val event = incomingEvent.value as T
-        logger.info("Call event.")
+        logger.info("Call event: $name")
         return onEvent(session, event)
     }
 
