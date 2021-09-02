@@ -56,7 +56,7 @@ class ConnectedHandlerTest {
 
         val returned = connectedHandler.onEvent(socketSession, event)
 
-        verify(socketSession, times(2)).id
+        verify(socketSession, times(3)).id
         verify(socketSession, times(1)).textMessage(anyString())
         verifyNoMoreInteractions(socketSession)
 

@@ -1,10 +1,8 @@
 package com.jtm.server.data.event
 
 import com.jtm.server.core.usecase.event.EventHandler
-import com.jtm.server.core.usecase.repository.SessionRepository
 import com.jtm.server.entrypoint.handler.ConnectedHandler
 import com.jtm.server.entrypoint.handler.DisconnectHandler
-import com.jtm.server.entrypoint.handler.PingHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct

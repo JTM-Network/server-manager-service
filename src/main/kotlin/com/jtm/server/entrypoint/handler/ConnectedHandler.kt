@@ -27,6 +27,7 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
         val accountId = tokenProvider.getAccountId(value.token) ?: return Mono.empty()
         val socketSession = SocketSession(accountId, session)
         sessionRepository.addSession(socketSession)
+        logger.info("Client connected: ${session.id}")
         return sendMessage(session, ConnectResponseEvent(session.id))
     }
 }
