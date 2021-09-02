@@ -7,12 +7,12 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
-class DisconnectHandler: EventHandler<DisconnectEvent>(DisconnectEvent::class.java) {
+class DisconnectHandler: EventHandler<DisconnectEvent>("disconnect", DisconnectEvent::class.java) {
 
     private val logger = LoggerFactory.getLogger(DisconnectHandler::class.java)
 
     override fun onEvent(session: WebSocketSession, value: DisconnectEvent): Mono<WebSocketMessage> {
-        logger.info("Client disconnected: ${value.id} | ${value.name}")
+        logger.info("Client disconnected: ${value.id}")
         return Mono.empty()
     }
 }

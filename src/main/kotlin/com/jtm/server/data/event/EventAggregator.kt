@@ -14,13 +14,12 @@ class EventAggregator {
 
     @PostConstruct
     fun init() {
-        registerHandler("ping", PingHandler())
-        registerHandler("connect", ConnectedHandler())
-        registerHandler("disconnect", DisconnectHandler())
+        registerHandler(ConnectedHandler())
+        registerHandler(DisconnectHandler())
     }
 
-    fun registerHandler(name: String, handler: EventHandler<*>) {
-        this.handlers[name] = handler
+    fun registerHandler(handler: EventHandler<*>) {
+        this.handlers[handler.name] = handler
     }
 
     fun getHandler(name: String): EventHandler<*>? {

@@ -2,4 +2,4 @@ package com.jtm.server.core.domain.model.client
 
 import java.util.*
 
-data class DisconnectEvent(val id: UUID)
+data class ConnectResponseEvent(val id: UUID)

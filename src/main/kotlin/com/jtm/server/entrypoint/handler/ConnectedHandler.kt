@@ -7,12 +7,12 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
-class ConnectedHandler: EventHandler<ConnectEvent>(ConnectEvent::class.java) {
+class ConnectedHandler: EventHandler<ConnectEvent>("connect", ConnectEvent::class.java) {
 
     private val logger = LoggerFactory.getLogger(ConnectedHandler::class.java)
 
     override fun onEvent(session: WebSocketSession, value: ConnectEvent): Mono<WebSocketMessage> {
-        logger.info("Client connected: ${value.id} | ${value.name}")
+        logger.info("Client connected. IP: ${value.info.ip}")
         return Mono.empty()
     }
 }

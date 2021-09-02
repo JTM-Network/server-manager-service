@@ -9,29 +9,26 @@ import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
-abstract class EventHandler<T>(private val clazz: Class<T>) {
+abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
 
+    private val mapper = ObjectMapper()
     private val logger = LoggerFactory.getLogger(EventHandler::class.java)
-    private val mapper = ObjectMapper().registerModule(KotlinModule())
 
     abstract fun onEvent(session: WebSocketSession, value: T): Mono<WebSocketMessage>
 
-    fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
-        logger.info("Handling event: ${event.name}")
-        val value = getObject(event)
-        return onEvent(session, value)
+    fun handleEvent(session: WebSocketSession, incomingEvent: IncomingEvent): Mono<WebSocketMessage> {
+        logger.info("Handling event...")
+        val event = incomingEvent.value as T
+        return onEvent(session, event)
     }
 
-    private fun getObject(event: IncomingEvent): T {
-        return mapper.readValue(event.value, clazz)
-    }
-
-    fun sendMessage(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): Mono<WebSocketMessage> {
+    fun sendMessage(session: WebSocketSession, value: Any): Mono<WebSocketMessage> {
+        val outgoingEvent = OutgoingEvent(name, value)
         val event = outgoingEvent.writeObject(value)
         return Mono.just(session.textMessage(mapper.writeValueAsString(event)))
     }
 
-    fun sendEvent(session: WebSocketSession, outgoingEvent: OutgoingEvent, value: Any): Mono<Void> {
-        return session.send { sendMessage(session, outgoingEvent, value) }
+    fun sendEvent(session: WebSocketSession, value: Any): Mono<Void> {
+        return session.send { sendMessage(session, value) }
     }
 }
