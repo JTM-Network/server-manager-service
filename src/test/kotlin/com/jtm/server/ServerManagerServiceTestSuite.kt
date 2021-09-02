@@ -3,6 +3,8 @@ package com.jtm.server
 import com.jtm.server.core.usecase.provider.TokenProviderTest
 import com.jtm.server.data.event.EventDispatcherTest
 import com.jtm.server.data.security.AuthenticationManagerTest
+import com.jtm.server.entrypoint.handler.ConnectedHandlerTest
+import com.jtm.server.entrypoint.handler.DisconnectHandlerTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -11,5 +13,8 @@ import org.junit.runners.Suite
     EventDispatcherTest::class,
     AuthenticationManagerTest::class,
     TokenProviderTest::class,
+
+    ConnectedHandlerTest::class,
+    DisconnectHandlerTest::class
 ])
 class ServerManagerServiceTestSuite
