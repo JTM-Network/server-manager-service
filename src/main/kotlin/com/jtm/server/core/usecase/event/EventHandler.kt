@@ -24,8 +24,7 @@ abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
 
     fun sendMessage(session: WebSocketSession, value: Any): Mono<WebSocketMessage> {
         val outgoingEvent = OutgoingEvent(name, value)
-        val event = outgoingEvent.writeObject(value)
-        return Mono.just(session.textMessage(mapper.writeValueAsString(event)))
+        return Mono.just(session.textMessage(mapper.writeValueAsString(outgoingEvent)))
     }
 
     fun sendEvent(session: WebSocketSession, value: Any): Mono<Void> {
