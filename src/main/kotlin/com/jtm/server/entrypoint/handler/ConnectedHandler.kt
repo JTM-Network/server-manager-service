@@ -13,8 +13,8 @@ class ConnectedHandler: EventHandler<ConnectEvent>("connect", ConnectEvent::clas
 
     override fun onEvent(session: WebSocketSession, value: ConnectEvent): Mono<WebSocketMessage> {
         logger.info("Client connected.")
-//        logger.info("IP: ${value.info.ip}")
-        logger.info(value.toString())
+        logger.info("ID: ${session.id}")
+        logger.info("IP: ${session.handshakeInfo.remoteAddress!!.address.hostAddress}")
         return Mono.empty()
     }
 }
