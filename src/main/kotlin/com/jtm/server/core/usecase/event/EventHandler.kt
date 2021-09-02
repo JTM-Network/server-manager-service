@@ -11,24 +11,28 @@ import reactor.core.publisher.Mono
 
 abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
 
-    private val mapper = ObjectMapper().registerModule(KotlinModule())
     private val logger = LoggerFactory.getLogger(EventHandler::class.java)
+    private val mapper = ObjectMapper().registerModule(KotlinModule())
 
     abstract fun onEvent(session: WebSocketSession, value: T): Mono<WebSocketMessage>
 
-    fun handleEvent(session: WebSocketSession, incomingEvent: IncomingEvent): Mono<WebSocketMessage> {
-        logger.info("Received event.")
-        val event = incomingEvent.value as T
-        logger.info("Call event: $name")
-        return onEvent(session, event)
+    fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
+        logger.info("Handling event: ${event.name}")
+        val value = getObject(event)
+        return onEvent(session, value)
+    }
+
+    private fun getObject(event: IncomingEvent): T {
+        return mapper.readValue(event.value, clazz)
     }
 
     fun sendMessage(session: WebSocketSession, value: Any): Mono<WebSocketMessage> {
-        val outgoingEvent = OutgoingEvent(name, value)
-        return Mono.just(session.textMessage(mapper.writeValueAsString(outgoingEvent)))
+        val outgoingEvent = OutgoingEvent(name)
+        val event = outgoingEvent.writeObject(value)
+        return Mono.just(session.textMessage(mapper.writeValueAsString(event)))
     }
 
-    fun sendEvent(session: WebSocketSession, value: Any): Mono<Void> {
+    fun sendEvent(session: WebSocketSession, value: String): Mono<Void> {
         return session.send { sendMessage(session, value) }
     }
 }

@@ -1,3 +1,13 @@
 package com.jtm.server.core.domain.model.event
 
-class OutgoingEvent(name: String, value: Any): Event(name, value)
+import com.fasterxml.jackson.databind.ObjectMapper
+
+class OutgoingEvent(name: String): Event(name, "") {
+
+    private val mapper = ObjectMapper()
+
+    fun writeObject(valueObject: Any): OutgoingEvent {
+        this.value = mapper.writeValueAsString(valueObject)
+        return this
+    }
+}
