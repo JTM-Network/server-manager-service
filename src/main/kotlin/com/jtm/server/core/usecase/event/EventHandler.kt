@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono
 
 abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
 
-    private val mapper = ObjectMapper()
+    private val mapper = ObjectMapper().registerModule(KotlinModule())
     private val logger = LoggerFactory.getLogger(EventHandler::class.java)
 
     abstract fun onEvent(session: WebSocketSession, value: T): Mono<WebSocketMessage>

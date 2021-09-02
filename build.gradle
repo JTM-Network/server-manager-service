@@ -35,7 +35,7 @@ dependencies {
     implementation 'io.sentry:sentry-spring-boot-starter:5.1.1'
     implementation 'io.sentry:sentry-logback:5.1.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'commons-io:commons-io:2.8.0'

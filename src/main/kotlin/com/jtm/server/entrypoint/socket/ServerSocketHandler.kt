@@ -14,12 +14,14 @@ import reactor.core.publisher.Mono
 @Component
 class ServerSocketHandler @Autowired constructor(private val eventDispatcher: EventDispatcher): WebSocketHandler {
 
-    private val mapper = ObjectMapper()
+    private val mapper = ObjectMapper().registerModule(KotlinModule())
 
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(
             session.receive()
-                .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) }
+                .flatMap {
+                    eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java))
+                }
         )
     }
 }
