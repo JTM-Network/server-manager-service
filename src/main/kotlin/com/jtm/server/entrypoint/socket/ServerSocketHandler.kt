@@ -17,11 +17,7 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
     private val mapper = ObjectMapper().registerModule(KotlinModule())
 
     override fun handle(session: WebSocketSession): Mono<Void> {
-        return session.send(
-            session.receive()
-                .flatMap {
-                    eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java))
-                }
-        )
+        return session.send(session.receive()
+            .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) })
     }
 }

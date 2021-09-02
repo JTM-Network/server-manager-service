@@ -12,7 +12,8 @@ class ConnectedHandler: EventHandler<ConnectEvent>("connect", ConnectEvent::clas
     private val logger = LoggerFactory.getLogger(ConnectedHandler::class.java)
 
     override fun onEvent(session: WebSocketSession, value: ConnectEvent): Mono<WebSocketMessage> {
-        logger.info("Client connected. IP: ${value.info.ip}")
+        logger.info("Client connected.")
+        logger.info("IP: ${value.info.ip}")
         return Mono.empty()
     }
 }
