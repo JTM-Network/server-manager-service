@@ -3,6 +3,7 @@ package com.jtm.server
 import com.jtm.server.core.usecase.provider.TokenProviderTest
 import com.jtm.server.data.event.EventDispatcherTest
 import com.jtm.server.data.security.AuthenticationManagerTest
+import com.jtm.server.data.service.LogServiceTest
 import com.jtm.server.data.service.SessionServiceTest
 import com.jtm.server.entrypoint.controller.SessionControllerTest
 import com.jtm.server.entrypoint.handler.ConnectedHandlerTest
@@ -20,6 +21,8 @@ import org.junit.runners.Suite
     DisconnectHandlerTest::class,
 
     SessionServiceTest::class,
-    SessionControllerTest::class
+    SessionControllerTest::class,
+
+    LogServiceTest::class,
 ])
 class ServerManagerServiceTestSuite
