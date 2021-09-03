@@ -8,6 +8,7 @@ import com.jtm.server.data.service.SessionServiceTest
 import com.jtm.server.entrypoint.controller.SessionControllerTest
 import com.jtm.server.entrypoint.handler.ConnectedHandlerTest
 import com.jtm.server.entrypoint.handler.DisconnectHandlerTest
+import com.jtm.server.entrypoint.handler.ServerLogHandlerTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -19,6 +20,7 @@ import org.junit.runners.Suite
 
     ConnectedHandlerTest::class,
     DisconnectHandlerTest::class,
+    ServerLogHandlerTest::class,
 
     SessionServiceTest::class,
     SessionControllerTest::class,
