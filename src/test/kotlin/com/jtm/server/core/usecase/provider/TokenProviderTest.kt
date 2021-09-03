@@ -16,11 +16,14 @@ class TokenProviderTest {
     private val tokenProvider = TokenProvider()
     private val uuid = UUID.randomUUID()
     private lateinit var token: String
+    private lateinit var access_token: String
 
     @Before
     fun setup() {
         tokenProvider.pluginKey = "pluginKey"
-        token = createToken("pluginKey", uuid, "test@gmail.com")
+        tokenProvider.accessKey = "accessKey"
+        token = createToken(tokenProvider.pluginKey, uuid, "test@gmail.com")
+        access_token = createToken(tokenProvider.accessKey, uuid, "test@gmail.com")
     }
 
     @Test
@@ -41,6 +44,22 @@ class TokenProviderTest {
     @Test
     fun getAccountEmail() {
         val email = tokenProvider.getAccountEmail(token)
+
+        assertNotNull(email)
+        assertThat(email).isEqualTo("test@gmail.com")
+    }
+
+    @Test
+    fun getAccessAccountId() {
+        val id = tokenProvider.getAccessAccountId(access_token)
+
+        assertNotNull(id)
+        assertThat(id).isEqualTo(uuid)
+    }
+
+    @Test
+    fun getAccessAccountEmail() {
+        val email = tokenProvider.getAccessAccountEmail(access_token)
 
         assertNotNull(email)
         assertThat(email).isEqualTo("test@gmail.com")

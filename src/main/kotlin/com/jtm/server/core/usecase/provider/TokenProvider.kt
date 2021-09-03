@@ -12,6 +12,9 @@ class TokenProvider {
     @Value("\${security.jwt.plugin-key:pluginKey}")
     lateinit var pluginKey: String
 
+    @Value("\${security.jwt.access-key:accessKey}")
+    lateinit var accessKey: String
+
     fun resolveToken(bearer: String): String {
         return bearer.replace("Bearer ", "")
     }
@@ -28,6 +31,23 @@ class TokenProvider {
     fun getAccountEmail(token: String): String? {
         return try {
             Jwts.parser().setSigningKey(pluginKey).parseClaimsJws(token).body.subject
+        } catch (ex: SignatureException) {
+            null
+        }
+    }
+
+    fun getAccessAccountId(token: String): UUID? {
+        return try {
+            val claims = Jwts.parser().setSigningKey(accessKey).parseClaimsJws(token)
+            UUID.fromString(claims.body["id"].toString())
+        } catch (ex: SignatureException) {
+            null
+        }
+    }
+
+    fun getAccessAccountEmail(token: String): String? {
+        return try {
+            Jwts.parser().setSigningKey(accessKey).parseClaimsJws(token).body.subject
         } catch (ex: SignatureException) {
             null
         }
