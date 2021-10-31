@@ -26,7 +26,7 @@ class ConnectedHandlerTest {
     private val connectedHandler = ConnectedHandler(sessionRepository, tokenProvider)
 
     private val socketSession: WebSocketSession = mock()
-    private val event: ConnectEvent = ConnectEvent(token = "token", info = ServerInfo("localhost"))
+    private val event: ConnectEvent = ConnectEvent(token = "token", publicKey = "key", info = ServerInfo("localhost"))
 
     @Test
     fun onEvent_thenSessionExists() {
