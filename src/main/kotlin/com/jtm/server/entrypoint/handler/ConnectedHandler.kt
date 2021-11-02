@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketMessage
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
+import java.util.*
 
 @Component
 class ConnectedHandler @Autowired constructor(private val sessionRepository: SessionRepository, private val tokenProvider: TokenProvider): EventHandler<ConnectEvent>("connect", ConnectEvent::class.java) {
@@ -19,15 +20,16 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
     private val logger = LoggerFactory.getLogger(ConnectedHandler::class.java)
 
     override fun onEvent(session: WebSocketSession, value: ConnectEvent): Mono<WebSocketMessage> {
-        if (sessionRepository.exists(session.id)) {
+        val serverId = value.serverId ?: UUID.randomUUID()
+        if (sessionRepository.exists(serverId)) {
             logger.info("Session already exists.")
             return Mono.empty()
         }
 
         val accountId = tokenProvider.getAccountId(value.token) ?: return Mono.empty()
-        val socketSession = SocketSession(accountId, session)
-        sessionRepository.addSession(socketSession)
+        val socketSession = SocketSession(serverId, accountId, session)
+        sessionRepository.addSession(serverId, socketSession)
         logger.info("Client connected: ${session.id}")
-        return sendMessage(session, ConnectResponseEvent(session.id, ""))
+        return sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id))
     }
 }

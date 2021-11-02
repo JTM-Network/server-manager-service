@@ -1,3 +1,5 @@
 package com.jtm.server.core.domain.model.client
 
-data class ConnectResponseEvent(val id: String, val publicKey: String)
+import java.util.*
+
+data class ConnectResponseEvent(val serverId: UUID, val sessionId: String)

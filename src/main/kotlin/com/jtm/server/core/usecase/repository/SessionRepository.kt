@@ -8,17 +8,17 @@ import kotlin.collections.HashMap
 @Component
 class SessionRepository {
 
-    private val sessions: MutableMap<String, SocketSession> = HashMap()
+    private val sessions: MutableMap<UUID, SocketSession> = HashMap()
 
-    fun addSession(session: SocketSession) {
-        sessions[session.session.id] = session
+    fun addSession(id: UUID, session: SocketSession) {
+        sessions[id] = session
     }
 
-    fun exists(id: String): Boolean {
+    fun exists(id: UUID): Boolean {
         return sessions.containsKey(id)
     }
 
-    fun getSession(id: String): SocketSession? {
+    fun getSession(id: UUID): SocketSession? {
         return sessions[id]
     }
 
@@ -30,7 +30,12 @@ class SessionRepository {
         return sessions.values.toList()
     }
 
-    fun removeSession(id: String) {
+    fun removeSession(id: UUID) {
         sessions.remove(id)
+    }
+
+    fun removeSession(id: String) {
+        val session = sessions.values.first { it.session.id == id }
+        sessions.remove(session.id)
     }
 }
