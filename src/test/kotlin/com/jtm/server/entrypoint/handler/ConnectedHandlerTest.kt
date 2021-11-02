@@ -1,5 +1,6 @@
 package com.jtm.server.entrypoint.handler
 
+import com.jtm.server.core.domain.dto.ServerInfoDto
 import com.jtm.server.core.domain.model.client.ConnectEvent
 import com.jtm.server.core.domain.entity.ServerInfo
 import com.jtm.server.core.usecase.provider.TokenProvider
@@ -28,7 +29,7 @@ class ConnectedHandlerTest {
     private val connectedHandler = ConnectedHandler(sessionRepository, infoService, tokenProvider)
 
     private val socketSession: WebSocketSession = mock()
-    private val event: ConnectEvent = ConnectEvent(token = "token", serverId = UUID.randomUUID(), info = ServerInfo(UUID.randomUUID(), UUID.randomUUID(), "localhost"))
+    private val event: ConnectEvent = ConnectEvent(token = "token", serverId = UUID.randomUUID(), info = ServerInfoDto("localhost"))
 
     @Test
     fun onEvent_thenSessionExists() {
