@@ -23,7 +23,7 @@ class SessionRepository {
     }
 
     fun getSessionsByAccount(id: UUID): List<SocketSession> {
-        return sessions.values.filter { it.accountId != id }
+        return sessions.values.filter { it.accountId == id }
     }
 
     fun getSessions(): List<SocketSession> {
