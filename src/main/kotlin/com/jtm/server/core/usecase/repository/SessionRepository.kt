@@ -34,8 +34,9 @@ class SessionRepository {
         sessions.remove(id)
     }
 
-    fun removeSessionId(id: String) {
-        val session = sessions.values.firstOrNull { it.session.id == id } ?: return
+    fun removeSessionId(id: String): SocketSession? {
+        val session = sessions.values.firstOrNull { it.session.id == id } ?: return null
         sessions.remove(session.id)
+        return session
     }
 }
