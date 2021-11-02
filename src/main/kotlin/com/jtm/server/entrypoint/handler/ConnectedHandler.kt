@@ -1,5 +1,6 @@
 package com.jtm.server.entrypoint.handler
 
+import com.jtm.server.core.domain.entity.ServerInfo
 import com.jtm.server.core.domain.model.client.ConnectEvent
 import com.jtm.server.core.domain.model.client.ConnectResponseEvent
 import com.jtm.server.core.domain.model.socket.SocketSession
@@ -33,7 +34,7 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
         sessionRepository.addSession(serverId, socketSession)
         logger.info("Client connected: $serverId")
         return infoService.connected(serverId)
-                .switchIfEmpty(Mono.defer { infoService.createInfo(value.info) })
+                .switchIfEmpty(Mono.defer { infoService.createInfo(ServerInfo(serverId, accountId, value.info.ip)) })
                 .flatMap { sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id)) }
 //        return sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id))
     }
