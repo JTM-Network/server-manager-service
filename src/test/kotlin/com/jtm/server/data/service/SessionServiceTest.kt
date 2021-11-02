@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.times
@@ -45,11 +46,11 @@ class SessionServiceTest {
 
     @Test
     fun getSession_thenNotFound() {
-        `when`(sessionRepository.getSession(anyString())).thenReturn(null)
+        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(null)
 
-        val returned = sessionService.getSession("id")
+        val returned = sessionService.getSession(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyString())
+        verify(sessionRepository, times(1)).getSession(anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         StepVerifier.create(returned)
@@ -59,11 +60,11 @@ class SessionServiceTest {
 
     @Test
     fun getSessionTest() {
-        `when`(sessionRepository.getSession(anyString())).thenReturn(session)
+        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(session)
 
-        val returned = sessionService.getSession("id")
+        val returned = sessionService.getSession(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyString())
+        verify(sessionRepository, times(1)).getSession(anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         StepVerifier.create(returned)
@@ -129,11 +130,11 @@ class SessionServiceTest {
 
     @Test
     fun removeSession_thenNotFound() {
-        `when`(sessionRepository.getSession(anyString())).thenReturn(null)
+        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(null)
 
-        val returned = sessionService.removeSession("id")
+        val returned = sessionService.removeSession(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyString())
+        verify(sessionRepository, times(1)).getSession(anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         StepVerifier.create(returned)
@@ -143,12 +144,12 @@ class SessionServiceTest {
 
     @Test
     fun removeSessionTest() {
-        `when`(sessionRepository.getSession(anyString())).thenReturn(session)
+        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(session)
 
-        val returned = sessionService.removeSession("id")
+        val returned = sessionService.removeSession(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyString())
-        verify(sessionRepository, times(1)).removeSession(anyString())
+        verify(sessionRepository, times(1)).getSession(anyOrNull())
+        verify(sessionRepository, times(1)).removeSession(anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         StepVerifier.create(returned)

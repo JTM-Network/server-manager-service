@@ -15,7 +15,7 @@ import java.util.*
 @Service
 class SessionService @Autowired constructor(private val sessionRepository: SessionRepository, private val tokenProvider: TokenProvider) {
 
-    fun getSession(id: String): Mono<SocketSession> {
+    fun getSession(id: UUID): Mono<SocketSession> {
         val session = sessionRepository.getSession(id) ?: return Mono.error { SessionNotFound() }
         return Mono.just(session)
     }
@@ -31,7 +31,7 @@ class SessionService @Autowired constructor(private val sessionRepository: Sessi
         return Mono.just(sessionRepository.getSessions())
     }
 
-    fun removeSession(id: String): Mono<SocketSession> {
+    fun removeSession(id: UUID): Mono<SocketSession> {
         val session = sessionRepository.getSession(id) ?: return Mono.error { SessionNotFound() }
         sessionRepository.removeSession(id)
         return Mono.just(session)

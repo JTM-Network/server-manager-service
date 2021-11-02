@@ -34,7 +34,7 @@ class SessionRepository {
         sessions.remove(id)
     }
 
-    fun removeSession(id: String) {
+    fun removeSessionId(id: String) {
         val session = sessions.values.first { it.session.id == id }
         sessions.remove(session.id)
     }

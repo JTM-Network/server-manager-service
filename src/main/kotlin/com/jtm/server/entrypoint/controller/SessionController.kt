@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import java.util.*
 
 @RestController
 @RequestMapping("/session")
 class SessionController @Autowired constructor(private val sessionService: SessionService) {
 
     @GetMapping("/{id}")
-    fun getSession(@PathVariable id: String): Mono<SocketSession> {
+    fun getSession(@PathVariable id: UUID): Mono<SocketSession> {
         return sessionService.getSession(id)
     }
 
@@ -27,7 +28,7 @@ class SessionController @Autowired constructor(private val sessionService: Sessi
     }
 
     @DeleteMapping("/{id}")
-    fun deleteSession(@PathVariable id: String): Mono<SocketSession> {
+    fun deleteSession(@PathVariable id: UUID): Mono<SocketSession> {
         return sessionService.removeSession(id)
     }
 }

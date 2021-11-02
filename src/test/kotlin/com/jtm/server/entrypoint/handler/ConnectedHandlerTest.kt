@@ -26,19 +26,15 @@ class ConnectedHandlerTest {
     private val connectedHandler = ConnectedHandler(sessionRepository, tokenProvider)
 
     private val socketSession: WebSocketSession = mock()
-    private val event: ConnectEvent = ConnectEvent(token = "token", publicKey = "key", info = ServerInfo("localhost"))
+    private val event: ConnectEvent = ConnectEvent(token = "token", serverId = UUID.randomUUID(), info = ServerInfo("localhost"))
 
     @Test
     fun onEvent_thenSessionExists() {
-        `when`(socketSession.id).thenReturn("id")
-        `when`(sessionRepository.exists(anyString())).thenReturn(true)
+        `when`(sessionRepository.exists(anyOrNull())).thenReturn(true)
 
         val returned = connectedHandler.onEvent(socketSession, event)
 
-        verify(socketSession, times(1)).id
-        verifyNoMoreInteractions(socketSession)
-
-        verify(sessionRepository, times(1)).exists(anyString())
+        verify(sessionRepository, times(1)).exists(anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         StepVerifier.create(returned)
@@ -51,17 +47,17 @@ class ConnectedHandlerTest {
 
         `when`(socketSession.id).thenReturn("id")
         `when`(socketSession.textMessage(anyString())).thenReturn(socketMessage)
-        `when`(sessionRepository.exists(anyString())).thenReturn(false)
+        `when`(sessionRepository.exists(anyOrNull())).thenReturn(false)
         `when`(tokenProvider.getAccountId(anyString())).thenReturn(UUID.randomUUID())
 
         val returned = connectedHandler.onEvent(socketSession, event)
 
-        verify(socketSession, times(3)).id
+        verify(socketSession, times(2)).id
         verify(socketSession, times(1)).textMessage(anyString())
         verifyNoMoreInteractions(socketSession)
 
-        verify(sessionRepository, times(1)).exists(anyString())
-        verify(sessionRepository, times(1)).addSession(anyOrNull())
+        verify(sessionRepository, times(1)).exists(anyOrNull())
+        verify(sessionRepository, times(1)).addSession(anyOrNull(), anyOrNull())
         verifyNoMoreInteractions(sessionRepository)
 
         verify(tokenProvider, times(1)).getAccountId(anyString())

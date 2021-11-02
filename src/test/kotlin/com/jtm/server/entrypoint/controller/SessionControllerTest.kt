@@ -4,6 +4,7 @@ import com.jtm.server.core.domain.model.socket.SocketSession
 import com.jtm.server.data.service.SessionService
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.times
@@ -34,25 +35,26 @@ class SessionControllerTest {
 
     private val accountId = UUID.randomUUID()
     private val socketSession: WebSocketSession = mock()
-    private val session = SocketSession(accountId, socketSession)
+    private val session = SocketSession(UUID.randomUUID(), accountId, socketSession)
 
     @Test
     fun getSessionTest() {
-        `when`(sessionService.getSession(anyString())).thenReturn(Mono.just(session))
+        `when`(sessionService.getSession(anyOrNull())).thenReturn(Mono.just(session))
 
         testClient.get()
-            .uri("/session/test")
+            .uri("/session/${UUID.randomUUID()}")
             .exchange()
             .expectStatus().isOk
             .expectBody()
             .jsonPath("$.accountId").isEqualTo(accountId.toString())
 
-        verify(sessionService, times(1)).getSession(anyString())
+        verify(sessionService, times(1)).getSession(anyOrNull())
         verifyNoMoreInteractions(sessionService)
     }
 
     @Test
     fun getSessionByAccountTest() {
+
         `when`(sessionService.getSessionByAccount(anyOrNull())).thenReturn(Mono.just(listOf(session)))
 
         testClient.get()
@@ -83,16 +85,16 @@ class SessionControllerTest {
 
     @Test
     fun deleteSessionTest() {
-        `when`(sessionService.removeSession(anyString())).thenReturn(Mono.just(session))
+        `when`(sessionService.removeSession(anyOrNull())).thenReturn(Mono.just(session))
 
         testClient.delete()
-            .uri("/session/test")
+            .uri("/session/${UUID.randomUUID()}")
             .exchange()
             .expectStatus().isOk
             .expectBody()
             .jsonPath("$.accountId").isEqualTo(accountId.toString())
 
-        verify(sessionService, times(1)).removeSession(anyString())
+        verify(sessionService, times(1)).removeSession(anyOrNull())
         verifyNoMoreInteractions(sessionService)
     }
 }
