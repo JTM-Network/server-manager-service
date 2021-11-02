@@ -1,7 +1,7 @@
 package com.jtm.server.entrypoint.controller
 
-import com.jtm.server.core.domain.entity.ServerInfo
-import com.jtm.server.data.service.ServerInfoService
+import com.jtm.server.core.domain.entity.Server
+import com.jtm.server.data.service.ServerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,20 +14,20 @@ import java.util.*
 
 @RestController
 @RequestMapping("/server-info")
-class ServerInfoController @Autowired constructor(private val serverInfoService: ServerInfoService) {
+class ServerController @Autowired constructor(private val serverInfoService: ServerService) {
 
     @GetMapping("/{id}")
-    fun getInfo(@PathVariable id: UUID): Mono<ServerInfo> {
+    fun getInfo(@PathVariable id: UUID): Mono<Server> {
         return serverInfoService.getInfo(id)
     }
 
     @GetMapping("/account")
-    fun getInfosByAccount(request: ServerHttpRequest): Flux<ServerInfo> {
+    fun getInfosByAccount(request: ServerHttpRequest): Flux<Server> {
         return serverInfoService.getInfoByAccount(request)
     }
 
     @GetMapping("/all")
-    fun getInfos(): Flux<ServerInfo> {
+    fun getInfos(): Flux<Server> {
         return serverInfoService.getInfos()
     }
 }

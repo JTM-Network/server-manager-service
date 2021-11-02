@@ -1,7 +1,8 @@
 package com.jtm.server.entrypoint.controller
 
-import com.jtm.server.core.domain.entity.ServerInfo
-import com.jtm.server.data.service.ServerInfoService
+import com.jtm.server.core.domain.entity.Server
+import com.jtm.server.core.domain.model.client.server.ServerInfo
+import com.jtm.server.data.service.ServerService
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
@@ -20,17 +21,17 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @RunWith(SpringRunner::class)
-@WebFluxTest(ServerInfoController::class)
+@WebFluxTest(ServerController::class)
 @AutoConfigureWebTestClient
-class ServerInfoControllerTest {
+class ServerControllerTest {
 
     @Autowired
     lateinit var testClient: WebTestClient
 
     @MockBean
-    lateinit var serverInfoService: ServerInfoService
+    lateinit var serverInfoService: ServerService
 
-    private val info = ServerInfo(UUID.randomUUID(), UUID.randomUUID(), ip = "ip")
+    private val info = Server(UUID.randomUUID(), UUID.randomUUID(), info = ServerInfo())
 
     @Test
     fun getInfoTest() {
@@ -43,7 +44,6 @@ class ServerInfoControllerTest {
                 .expectBody()
                 .jsonPath("$.id").isEqualTo(info.id.toString())
                 .jsonPath("$.accountId").isEqualTo(info.accountId.toString())
-                .jsonPath("$.ip").isEqualTo(info.ip)
 
         verify(serverInfoService, times(1)).getInfo(anyOrNull())
         verifyNoMoreInteractions(serverInfoService)
@@ -60,7 +60,6 @@ class ServerInfoControllerTest {
                 .expectBody()
                 .jsonPath("$[0].id").isEqualTo(info.id.toString())
                 .jsonPath("$[0].accountId").isEqualTo(info.accountId.toString())
-                .jsonPath("$[0].ip").isEqualTo(info.ip)
 
         verify(serverInfoService, times(1)).getInfoByAccount(anyOrNull())
         verifyNoMoreInteractions(serverInfoService)
@@ -77,7 +76,6 @@ class ServerInfoControllerTest {
                 .expectBody()
                 .jsonPath("$[0].id").isEqualTo(info.id.toString())
                 .jsonPath("$[0].accountId").isEqualTo(info.accountId.toString())
-                .jsonPath("$[0].ip").isEqualTo(info.ip)
 
         verify(serverInfoService, times(1)).getInfos()
         verifyNoMoreInteractions(serverInfoService)

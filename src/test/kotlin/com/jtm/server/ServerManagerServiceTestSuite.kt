@@ -4,9 +4,9 @@ import com.jtm.server.core.usecase.provider.TokenProviderTest
 import com.jtm.server.data.event.EventDispatcherTest
 import com.jtm.server.data.security.AuthenticationManagerTest
 import com.jtm.server.data.service.LogServiceTest
-import com.jtm.server.data.service.ServerInfoServiceTest
+import com.jtm.server.data.service.ServerServiceTest
 import com.jtm.server.data.service.SessionServiceTest
-import com.jtm.server.entrypoint.controller.ServerInfoControllerTest
+import com.jtm.server.entrypoint.controller.ServerControllerTest
 import com.jtm.server.entrypoint.controller.SessionControllerTest
 import com.jtm.server.entrypoint.handler.ConnectedHandlerTest
 import com.jtm.server.entrypoint.handler.ServerLogHandlerTest
@@ -25,8 +25,8 @@ import org.junit.runners.Suite
     SessionServiceTest::class,
     SessionControllerTest::class,
 
-    ServerInfoServiceTest::class,
-    ServerInfoControllerTest::class,
+    ServerServiceTest::class,
+    ServerControllerTest::class,
 
     LogServiceTest::class,
 ])

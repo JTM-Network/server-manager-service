@@ -1,11 +1,11 @@
 package com.jtm.server.entrypoint.handler
 
-import com.jtm.server.core.domain.dto.ServerInfoDto
-import com.jtm.server.core.domain.model.client.ConnectEvent
-import com.jtm.server.core.domain.entity.ServerInfo
+import com.jtm.server.core.domain.entity.Server
+import com.jtm.server.core.domain.model.client.server.ServerInfo
+import com.jtm.server.core.domain.model.event.impl.ConnectEvent
 import com.jtm.server.core.usecase.provider.TokenProvider
 import com.jtm.server.core.usecase.repository.SessionRepository
-import com.jtm.server.data.service.ServerInfoService
+import com.jtm.server.data.service.ServerService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,12 +24,12 @@ import java.util.*
 class ConnectedHandlerTest {
 
     private val sessionRepository: SessionRepository = mock()
-    private val infoService: ServerInfoService = mock()
+    private val infoService: ServerService = mock()
     private val tokenProvider: TokenProvider = mock()
     private val connectedHandler = ConnectedHandler(sessionRepository, infoService, tokenProvider)
 
     private val socketSession: WebSocketSession = mock()
-    private val event: ConnectEvent = ConnectEvent(token = "token", serverId = UUID.randomUUID(), info = ServerInfoDto("localhost"))
+    private val event: ConnectEvent = ConnectEvent(token = "token", serverId = UUID.randomUUID(), info = ServerInfo())
 
     @Test
     fun onEvent_thenSessionExists() {
@@ -47,7 +47,7 @@ class ConnectedHandlerTest {
     @Test
     fun onEvent() {
         val socketMessage: WebSocketMessage = mock()
-        val info = ServerInfo(UUID.randomUUID(), UUID.randomUUID())
+        val info = Server(UUID.randomUUID(), UUID.randomUUID(), info = ServerInfo())
 
         `when`(socketSession.id).thenReturn("id")
         `when`(socketSession.textMessage(anyString())).thenReturn(socketMessage)

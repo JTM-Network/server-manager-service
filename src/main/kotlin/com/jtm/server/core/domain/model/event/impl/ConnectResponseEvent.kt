@@ -1,4 +1,4 @@
-package com.jtm.server.core.domain.model.client
+package com.jtm.server.core.domain.model.event.impl
 
 import java.util.*
 

@@ -1,8 +1,9 @@
 package com.jtm.server.data.service
 
-import com.jtm.server.core.domain.entity.ServerInfo
+import com.jtm.server.core.domain.entity.Server
 import com.jtm.server.core.domain.exceptions.ServerInfoFound
 import com.jtm.server.core.domain.exceptions.ServerInfoNotFound
+import com.jtm.server.core.domain.model.client.server.ServerInfo
 import com.jtm.server.core.usecase.provider.TokenProvider
 import com.jtm.server.core.usecase.repository.ServerInfoRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -25,12 +26,12 @@ import reactor.test.StepVerifier
 import java.util.*
 
 @RunWith(SpringRunner::class)
-class ServerInfoServiceTest {
+class ServerServiceTest {
 
     private val infoRepository: ServerInfoRepository = mock()
     private val tokenProvider: TokenProvider = mock()
-    private val infoService = ServerInfoService(infoRepository, tokenProvider)
-    private val info = ServerInfo(UUID.randomUUID(), UUID.randomUUID(), ip = "ip")
+    private val infoService = ServerService(infoRepository, tokenProvider)
+    private val info = Server(UUID.randomUUID(), UUID.randomUUID(), info = ServerInfo())
 
     @Test
     fun createInfo_thenFound() {
@@ -60,7 +61,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
@@ -79,7 +79,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
@@ -112,7 +111,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
@@ -144,7 +142,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
@@ -179,7 +176,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
@@ -197,7 +193,6 @@ class ServerInfoServiceTest {
                 .assertNext {
                     assertThat(it.id).isEqualTo(info.id)
                     assertThat(it.accountId).isEqualTo(info.accountId)
-                    assertThat(it.ip).isEqualTo("ip")
                 }
                 .verifyComplete()
     }
