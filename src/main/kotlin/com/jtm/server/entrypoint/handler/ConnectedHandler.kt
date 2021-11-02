@@ -29,13 +29,11 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
         }
 
         val accountId = tokenProvider.getAccountId(value.token) ?: return Mono.empty()
-        logger.info("Account ID: $accountId")
         val socketSession = SocketSession(serverId, accountId, session)
         sessionRepository.addSession(serverId, socketSession)
         logger.info("Client connected: $serverId")
         return infoService.connected(serverId)
-                .switchIfEmpty(Mono.defer { infoService.createInfo(Server(serverId, accountId, value.info)) })
+                .switchIfEmpty(Mono.defer { infoService.createInfo(Server(serverId, accountId, value.info)).flatMap { infoService.connected(serverId) } })
                 .flatMap { sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id)) }
-//        return sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id))
     }
 }
