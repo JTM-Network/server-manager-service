@@ -18,12 +18,17 @@ abstract class EventHandler<T>(val name: String, private val clazz: Class<T>) {
 
     fun handleEvent(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
         logger.info("Handling event: ${event.name}")
-        val value = getObject(event)
+        val value = getObject(event) ?: return Mono.empty()
         return onEvent(session, value)
     }
 
-    private fun getObject(event: IncomingEvent): T {
-        return mapper.readValue(event.value, clazz)
+    private fun getObject(event: IncomingEvent): T? {
+        return try {
+            mapper.readValue(event.value, clazz)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
     }
 
     fun sendMessage(session: WebSocketSession, value: Any): Mono<WebSocketMessage> {

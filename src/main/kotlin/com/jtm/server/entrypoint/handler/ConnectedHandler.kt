@@ -20,13 +20,16 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
     private val logger = LoggerFactory.getLogger(ConnectedHandler::class.java)
 
     override fun onEvent(session: WebSocketSession, value: ConnectEvent): Mono<WebSocketMessage> {
+        logger.info("Checking server id...")
         val serverId = value.serverId ?: UUID.randomUUID()
+        logger.info("Server Id valid.")
         if (sessionRepository.exists(serverId)) {
             logger.info("Session already exists.")
             return Mono.empty()
         }
 
         val accountId = tokenProvider.getAccountId(value.token) ?: return Mono.empty()
+        logger.info("Account Id found.")
         val socketSession = SocketSession(serverId, accountId, session)
         sessionRepository.addSession(serverId, socketSession)
         logger.info("Client connected: ${session.id}")
