@@ -24,7 +24,6 @@ class ServerInfoService @Autowired constructor(private val infoRepository: Serve
 
     fun connected(id: UUID): Mono<ServerInfo> {
         return infoRepository.findById(id)
-                .switchIfEmpty(Mono.defer { Mono.error(ServerInfoNotFound()) })
                 .flatMap { infoRepository.save(it.connect()) }
     }
 

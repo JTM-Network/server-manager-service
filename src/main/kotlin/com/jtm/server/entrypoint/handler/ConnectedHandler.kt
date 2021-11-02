@@ -6,6 +6,7 @@ import com.jtm.server.core.domain.model.socket.SocketSession
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.core.usecase.provider.TokenProvider
 import com.jtm.server.core.usecase.repository.SessionRepository
+import com.jtm.server.data.service.ServerInfoService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -15,7 +16,7 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @Component
-class ConnectedHandler @Autowired constructor(private val sessionRepository: SessionRepository, private val tokenProvider: TokenProvider): EventHandler<ConnectEvent>("connect", ConnectEvent::class.java) {
+class ConnectedHandler @Autowired constructor(private val sessionRepository: SessionRepository, private val infoService: ServerInfoService, private val tokenProvider: TokenProvider): EventHandler<ConnectEvent>("connect", ConnectEvent::class.java) {
 
     private val logger = LoggerFactory.getLogger(ConnectedHandler::class.java)
 
@@ -31,6 +32,9 @@ class ConnectedHandler @Autowired constructor(private val sessionRepository: Ses
         val socketSession = SocketSession(serverId, accountId, session)
         sessionRepository.addSession(serverId, socketSession)
         logger.info("Client connected: $serverId")
-        return sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id))
+        return infoService.connected(serverId)
+                .switchIfEmpty(Mono.defer { infoService.createInfo(value.info) })
+                .flatMap { sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id)) }
+//        return sendMessage("connect_response", session, ConnectResponseEvent(serverId, session.id))
     }
 }

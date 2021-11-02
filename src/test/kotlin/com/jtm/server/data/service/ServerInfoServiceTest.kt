@@ -66,20 +66,6 @@ class ServerInfoServiceTest {
     }
 
     @Test
-    fun connected_thenNotFound() {
-        `when`(infoRepository.findById(any(UUID::class.java))).thenReturn(Mono.empty())
-
-        val returned = infoService.connected(UUID.randomUUID())
-
-        verify(infoRepository, times(1)).findById(any(UUID::class.java))
-        verifyNoMoreInteractions(infoRepository)
-
-        StepVerifier.create(returned)
-                .expectError(ServerInfoNotFound::class.java)
-                .verify()
-    }
-
-    @Test
     fun connected() {
         `when`(infoRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(info))
         `when`(infoRepository.save(anyOrNull())).thenReturn(Mono.just(info.connect()))
