@@ -27,7 +27,6 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
                     val socketSession = sessionRepository.removeSessionId(session.id) ?: return@doFinally
                     serverService.disconnected(socketSession.id)
                             .doOnNext { logger.info("Client disconnected: ${it.id}") }
-                            .block()
                 }
         )
     }
