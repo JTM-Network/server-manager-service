@@ -25,6 +25,8 @@ class LogRepository {
     }
 
     fun removeLog(id: UUID) {
+        val log = getLog(id) ?: return
+        log.tryEmitComplete()
         logs.remove(id)
     }
 
