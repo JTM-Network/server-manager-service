@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
+import java.util.*
 
 @RestController
 @RequestMapping("/logs")
 class LogController @Autowired constructor(private val logService: LogService) {
 
     @GetMapping("/{id}")
-    fun getLogs(@PathVariable id: String): Flux<ServerSentEvent<String>> {
+    fun getLogs(@PathVariable id: UUID): Flux<ServerSentEvent<String>> {
         return logService.getLogs(id)
     }
 }
