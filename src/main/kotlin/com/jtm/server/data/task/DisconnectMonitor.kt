@@ -5,16 +5,16 @@ import com.jtm.server.data.service.ServerService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Component
+import java.util.concurrent.Executor
 
 @Component
-class DisconnectMonitor @Autowired constructor(@Qualifier("coreExecutor") coreExecutor: ThreadPoolTaskExecutor, private val sessionRepository: SessionRepository, private val serverService: ServerService): Runnable {
+class DisconnectMonitor @Autowired constructor(@Qualifier("coreExecutor") coreExecutor: Executor, private val sessionRepository: SessionRepository, private val serverService: ServerService): Runnable {
 
     private val logger = LoggerFactory.getLogger(DisconnectMonitor::class.java)
 
     init {
-        coreExecutor.submit(this)
+        coreExecutor.execute(this)
     }
 
     override fun run() {
