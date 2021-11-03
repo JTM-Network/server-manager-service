@@ -18,7 +18,7 @@ class DisconnectMonitor @Autowired constructor(@Qualifier("coreExecutor") coreEx
     }
 
     override fun run() {
-        logger.info("Monitoring disconnections.")
+        logger.info("Monitoring client connections.")
         while (true) {
             serverService.getInfos()
                     .filter { it.isConnected && (!sessionRepository.exists(it.id)) }
@@ -26,6 +26,9 @@ class DisconnectMonitor @Autowired constructor(@Qualifier("coreExecutor") coreEx
                         logger.info("Confirming disconnection: ${it.id}")
                         serverService.disconnected(it.id)
                     }
+                    .then()
+                    .thenReturn(Unit)
+                    .block()
         }
     }
 }
