@@ -22,11 +22,11 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(session.receive()
                 .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) }
+
                 .doFinally {
                     session.close()
-                    val socketSession = sessionRepository.removeSessionId(session.id) ?: return@doFinally
-                    serverService.disconnected(socketSession.id)
-                            .doOnNext { logger.info("Client disconnected: ${it.id}") }
+                    sessionRepository.removeSessionId(session.id)
+                    logger.info("Client disconnected: ${session.id}")
                 }
         )
     }
