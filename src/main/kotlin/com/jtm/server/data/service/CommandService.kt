@@ -16,7 +16,10 @@ class CommandService @Autowired constructor(private val sessionService: SessionS
     fun sendCommand(dto: CommandDto): Mono<Void> {
         logger.info("Received command.")
         return sessionService.getSession(UUID.fromString(dto.serverId))
-                .flatMap { it.sendMessage("send_command", Command(dto.command)) }
+                .flatMap {
+                    logger.info("Sending message..")
+                    it.sendMessage("send_command", Command(dto.command))
+                }
                 .then()
     }
 }
