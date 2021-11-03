@@ -14,8 +14,8 @@ import java.util.*
 class LogService @Autowired constructor(private val logRepository: LogRepository, private val sessionRepository: SessionRepository) {
 
     fun getLogs(id: UUID): Flux<ServerSentEvent<String>> {
-        val session = sessionRepository.getSession(id) ?: return Flux.error(SessionNotFound())
-        val logs = logRepository.getLog(session.session.id) ?: return Flux.error { LogsNotFound() }
+//        val session = sessionRepository.getSession(id) ?: return Flux.error(SessionNotFound())
+        val logs = logRepository.getLog(id) ?: return Flux.error { LogsNotFound() }
         return logs.asFlux().map { ServerSentEvent.builder(it).build() }
     }
 }

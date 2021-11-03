@@ -22,6 +22,10 @@ class SessionRepository {
         return sessions[id]
     }
 
+    fun getSessionBySessionId(id: String): SocketSession? {
+        return sessions.values.firstOrNull { it.session.id == id }
+    }
+
     fun getSessionsByAccount(id: UUID): List<SocketSession> {
         return sessions.values.filter { it.accountId == id }
     }

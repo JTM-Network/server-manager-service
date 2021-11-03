@@ -1,11 +1,14 @@
 package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.model.server.ServerLog
+import com.jtm.server.core.domain.model.socket.SocketSession
 import com.jtm.server.core.usecase.repository.LogRepository
+import com.jtm.server.core.usecase.repository.SessionRepository
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.springframework.test.context.junit4.SpringRunner
@@ -17,7 +20,8 @@ import java.util.*
 class ServerLogHandlerTest {
 
     private val logRepository: LogRepository = mock()
-    private val logHandler = ServerLogHandler(logRepository)
+    private val sessionRepository: SessionRepository = mock()
+    private val logHandler = ServerLogHandler(logRepository, sessionRepository)
 
     private val session: WebSocketSession = mock()
     private val log = ServerLog("test...")
@@ -29,13 +33,14 @@ class ServerLogHandlerTest {
 
     @Test
     fun onEvent_thenAddLog() {
-        `when`(logRepository.exists(anyString())).thenReturn(false)
+        `when`(sessionRepository.getSessionBySessionId(anyOrNull())).thenReturn(SocketSession(UUID.randomUUID(), UUID.randomUUID(), session))
+        `when`(logRepository.exists(anyOrNull())).thenReturn(false)
 
         val returned = logHandler.onEvent(session, log)
 
-        verify(logRepository, times(1)).exists(anyString())
-        verify(logRepository, times(1)).addLog(anyString())
-        verify(logRepository, times(1)).sendLogMessage(anyString(), anyString())
+        verify(logRepository, times(1)).exists(anyOrNull())
+        verify(logRepository, times(1)).addLog(anyOrNull())
+        verify(logRepository, times(1)).sendLogMessage(anyOrNull(), anyString())
         verifyNoMoreInteractions(logRepository)
 
         StepVerifier.create(returned)
@@ -44,12 +49,13 @@ class ServerLogHandlerTest {
 
     @Test
     fun onEvent() {
-        `when`(logRepository.exists(anyString())).thenReturn(true)
+        `when`(sessionRepository.getSessionBySessionId(anyOrNull())).thenReturn(SocketSession(UUID.randomUUID(), UUID.randomUUID(), session))
+        `when`(logRepository.exists(anyOrNull())).thenReturn(true)
 
         val returned = logHandler.onEvent(session, log)
 
-        verify(logRepository, times(1)).exists(anyString())
-        verify(logRepository, times(1)).sendLogMessage(anyString(), anyString())
+        verify(logRepository, times(1)).exists(anyOrNull())
+        verify(logRepository, times(1)).sendLogMessage(anyOrNull(), anyString())
         verifyNoMoreInteractions(logRepository)
 
         StepVerifier.create(returned)

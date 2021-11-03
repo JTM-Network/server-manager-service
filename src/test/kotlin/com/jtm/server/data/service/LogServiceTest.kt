@@ -33,16 +33,11 @@ class LogServiceTest {
 
     @Test
     fun getLogs_thenNotFound() {
-        `when`(webSocketSession.id).thenReturn("id")
-        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(SocketSession(UUID.randomUUID(), UUID.randomUUID(), webSocketSession))
-        `when`(logRepository.getLog(anyString())).thenReturn(null)
+        `when`(logRepository.getLog(anyOrNull())).thenReturn(null)
 
         val returned = logService.getLogs(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyOrNull())
-        verifyNoMoreInteractions(sessionRepository)
-
-        verify(logRepository, times(1)).getLog(anyString())
+        verify(logRepository, times(1)).getLog(anyOrNull())
         verifyNoMoreInteractions(logRepository)
 
         StepVerifier.create(returned)
@@ -52,17 +47,12 @@ class LogServiceTest {
 
     @Test
     fun getLogsTest() {
-        `when`(webSocketSession.id).thenReturn("id")
-        `when`(sessionRepository.getSession(anyOrNull())).thenReturn(SocketSession(UUID.randomUUID(), UUID.randomUUID(), webSocketSession))
-        `when`(logRepository.getLog(anyString())).thenReturn(sink)
+        `when`(logRepository.getLog(anyOrNull())).thenReturn(sink)
         `when`(sink.asFlux()).thenReturn(flux)
 
         val returned = logService.getLogs(UUID.randomUUID())
 
-        verify(sessionRepository, times(1)).getSession(anyOrNull())
-        verifyNoMoreInteractions(sessionRepository)
-
-        verify(logRepository, times(1)).getLog(anyString())
+        verify(logRepository, times(1)).getLog(anyOrNull())
         verifyNoMoreInteractions(logRepository)
 
         StepVerifier.create(returned)

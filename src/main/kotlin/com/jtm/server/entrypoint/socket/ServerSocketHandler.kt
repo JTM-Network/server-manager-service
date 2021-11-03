@@ -26,8 +26,8 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
                 .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) }
                 .doFinally {
                     session.close()
-                    sessionRepository.removeSessionId(session.id)
-                    logRepository.removeLog(session.id)
+                    val socketSession = sessionRepository.removeSessionId(session.id) ?: return@doFinally
+                    logRepository.removeLog(socketSession.id)
                     logger.info("Client disconnected: ${session.id}")
                 }
         )
