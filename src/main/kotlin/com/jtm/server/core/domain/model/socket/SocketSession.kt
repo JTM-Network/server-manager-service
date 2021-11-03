@@ -19,6 +19,6 @@ data class SocketSession(val id: UUID, val accountId: UUID, val session: WebSock
     }
 
     fun sendEvent(name: String, value: Any): Mono<Void> {
-        return session.send { sendMessage(name, value).block() }
+        return session.send(sendMessage(name, value))
     }
 }
