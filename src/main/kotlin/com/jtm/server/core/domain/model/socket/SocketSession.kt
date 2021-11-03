@@ -12,9 +12,13 @@ data class SocketSession(val id: UUID, val accountId: UUID, val session: WebSock
 
     private val mapper = ObjectMapper().registerModule(KotlinModule())
 
-    fun sendMessage(name: String, value: Any): Mono<WebSocketMessage> {
+    private fun sendMessage(name: String, value: Any): Mono<WebSocketMessage> {
         val outgoingEvent = OutgoingEvent(name)
         val event = outgoingEvent.writeObject(value)
         return Mono.just(session.textMessage(mapper.writeValueAsString(event)))
+    }
+
+    fun sendEvent(name: String, value: Any): Mono<Void> {
+        return session.send { sendMessage(name, value) }
     }
 }

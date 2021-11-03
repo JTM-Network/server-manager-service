@@ -18,7 +18,7 @@ class CommandService @Autowired constructor(private val sessionService: SessionS
         return sessionService.getSession(UUID.fromString(dto.serverId))
                 .flatMap {
                     logger.info("Sending message..")
-                    it.sendMessage("send_command", Command(dto.command))
+                    it.sendEvent("send_command", Command(dto.command))
                 }
                 .then()
     }
