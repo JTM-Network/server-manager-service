@@ -20,7 +20,7 @@ class ServerLogHandlerTest {
     private val logHandler = ServerLogHandler(logRepository)
 
     private val session: WebSocketSession = mock()
-    private val log = ServerLog(LinkedList(listOf("test...")))
+    private val log = ServerLog("test...")
 
     @Before
     fun setup() {
