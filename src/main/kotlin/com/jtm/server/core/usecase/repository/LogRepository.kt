@@ -11,7 +11,7 @@ class LogRepository {
     private val logs: MutableMap<String, Sinks.Many<String>> = HashMap()
 
     fun addLog(id: String) {
-        logs[id] = Sinks.many().replay().latest()
+        logs[id] = Sinks.many().replay().all()
     }
 
     fun exists(id: String): Boolean {
