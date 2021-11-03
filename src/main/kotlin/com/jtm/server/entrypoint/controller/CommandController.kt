@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/command")
 class CommandController @Autowired constructor(private val commandService: CommandService) {
 
-    @PostMapping("/{id}")
+    @PostMapping("/send")
     fun sendCommand(@RequestBody dto: CommandDto): Mono<Void> {
         return commandService.sendCommand(dto)
     }
