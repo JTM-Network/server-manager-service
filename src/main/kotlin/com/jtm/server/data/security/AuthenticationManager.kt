@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 class AuthenticationManager @Autowired constructor(private val tokenProvider: TokenProvider) {
 
     fun authenticate(token: String): Boolean {
-        val id = tokenProvider.getAccountId(token) ?: return false
-        val email = tokenProvider.getAccountEmail(token) ?: return false
+        tokenProvider.getAccountId(token) ?: return false
+        tokenProvider.getAccountEmail(token) ?: return false
         return true
     }
 }
