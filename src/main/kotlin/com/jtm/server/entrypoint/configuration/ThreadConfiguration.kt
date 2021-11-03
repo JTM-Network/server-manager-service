@@ -8,7 +8,7 @@ import java.util.concurrent.Executor
 @Configuration
 open class ThreadConfiguration {
 
-    @Bean(name = ["coreExecutor"])
+    @Bean("coreExecutor")
     open fun taskExecutor(): Executor {
         val poolExecutor = ThreadPoolTaskExecutor()
         poolExecutor.corePoolSize = 50
