@@ -19,11 +19,13 @@ class DisconnectMonitor @Autowired constructor(@Qualifier("coreExecutor") coreEx
 
     override fun run() {
         logger.info("Monitoring disconnections.")
-        serverService.getInfos()
-                .filter { it.isConnected && (!sessionRepository.exists(it.id)) }
-                .flatMap {
-                    logger.info("Confirming disconnection: ${it.id}")
-                    serverService.disconnected(it.id)
-                }
+        while (true) {
+            serverService.getInfos()
+                    .filter { it.isConnected && (!sessionRepository.exists(it.id)) }
+                    .flatMap {
+                        logger.info("Confirming disconnection: ${it.id}")
+                        serverService.disconnected(it.id)
+                    }
+        }
     }
 }
