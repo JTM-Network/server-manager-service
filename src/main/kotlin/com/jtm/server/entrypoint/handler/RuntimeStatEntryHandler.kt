@@ -13,7 +13,7 @@ import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
 
 @Component
-class RuntimeStatEntryHandler @Autowired constructor(eventAggregator: EventAggregator, private val runtimeStatsRepository: RuntimeStatsRepository): EventHandler<RuntimeEntryEvent>("runtime_entry", RuntimeEntryEvent::class.java) {
+class RuntimeStatEntryHandler @Autowired constructor(private val runtimeStatsRepository: RuntimeStatsRepository): EventHandler<RuntimeEntryEvent>("runtime_entry", RuntimeEntryEvent::class.java) {
 
     override fun onEvent(session: WebSocketSession, value: RuntimeEntryEvent): Mono<WebSocketMessage> {
         return runtimeStatsRepository.insert(RuntimeStats(value.serverId, value.runtime))
