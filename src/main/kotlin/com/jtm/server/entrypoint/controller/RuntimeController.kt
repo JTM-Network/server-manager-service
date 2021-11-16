@@ -23,6 +23,11 @@ class RuntimeController @Autowired constructor(private val runtimeService: Runti
         return runtimeService.getRuntimesByServerId(serverId)
     }
 
+    @GetMapping("/server/{serverId}/latest")
+    fun getRuntimeLatest(@PathVariable serverId: UUID): Mono<RuntimeStats> {
+        return runtimeService.getRuntimeLatest(serverId)
+    }
+
     @GetMapping("/server/{serverId}/{time}")
     fun getRuntimesByServerIdAndTime(@PathVariable serverId: UUID, @PathVariable time: TimeType): Flux<RuntimeStats> {
         return runtimeService.getRuntimesByServerIdAndTime(serverId, time)
