@@ -29,7 +29,7 @@ class RuntimeService @Autowired constructor(private val runtimeStatsRepository: 
     fun getRuntimeLatest(serverId: UUID): Mono<RuntimeStats> {
         return runtimeStatsRepository.findByServerId(serverId)
                 .sort { runtimeStats, runtimeStats2 -> runtimeStats.id.compareTo(runtimeStats2.id) }
-                .single()
+                .next()
     }
 
     fun getRuntimesByServerIdAndTime(serverId: UUID, time: TimeType): Flux<RuntimeStats> {
