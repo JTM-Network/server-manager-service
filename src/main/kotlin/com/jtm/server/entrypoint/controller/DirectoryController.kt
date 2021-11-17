@@ -17,11 +17,6 @@ class DirectoryController @Autowired constructor(private val directoryService: D
         return if (path != null) directoryService.getDirectoryPath(id, path) else directoryService.getDirectory(id)
     }
 
-//    @GetMapping("/{id}/path")
-//    fun getDirectoryPath(@PathVariable id: UUID, @RequestParam("path") path: String): Mono<Directory> {
-//        return directoryService.getDirectoryPath(id, path)
-//    }
-
     @GetMapping("/all")
     fun getDirectories(): Flux<Directory> {
         return directoryService.getDirectories()

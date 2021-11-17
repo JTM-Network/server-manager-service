@@ -1,8 +1,7 @@
 package com.jtm.server.data.service
 
-import com.jtm.server.core.domain.exceptions.DirectoryFound
-import com.jtm.server.core.domain.exceptions.DirectoryNotFound
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.exceptions.DirectoryNotFound
 import com.jtm.server.core.usecase.repository.DirectoryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,7 +14,6 @@ class DirectoryService @Autowired constructor(private val directoryRepository: D
 
     fun addDirectory(dir: Directory): Mono<Directory> {
         return directoryRepository.findById(dir.serverId)
-                .flatMap<Directory?> { Mono.defer { Mono.error(DirectoryFound()) } }
                 .switchIfEmpty(Mono.defer { directoryRepository.save(dir) })
     }
 
