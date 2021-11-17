@@ -1,10 +1,7 @@
 package com.jtm.server.data.event
 
 import com.jtm.server.core.usecase.event.EventHandler
-import com.jtm.server.entrypoint.handler.ConnectedHandler
-import com.jtm.server.entrypoint.handler.RuntimeStatEntryHandler
-import com.jtm.server.entrypoint.handler.RuntimeStatStreamHandler
-import com.jtm.server.entrypoint.handler.ServerLogHandler
+import com.jtm.server.entrypoint.handler.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
@@ -21,6 +18,7 @@ class EventAggregator @Autowired constructor(private val context: ApplicationCon
         registerHandler(context.getBean(ServerLogHandler::class.java))
         registerHandler(context.getBean(RuntimeStatEntryHandler::class.java))
         registerHandler(context.getBean(RuntimeStatStreamHandler::class.java))
+        registerHandler(context.getBean(FetchDirectoryHandler::class.java))
     }
 
     fun registerHandler(handler: EventHandler<*>) {
