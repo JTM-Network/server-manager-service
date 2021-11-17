@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono
 class RuntimeStatEntryHandler @Autowired constructor(private val runtimeStatsRepository: RuntimeStatsRepository): EventHandler<RuntimeEntryEvent>("runtime_entry", RuntimeEntryEvent::class.java) {
 
     override fun onEvent(session: WebSocketSession, value: RuntimeEntryEvent): Mono<WebSocketMessage> {
-        return runtimeStatsRepository.insert(RuntimeStats(value.serverId, value.runtime))
+        return runtimeStatsRepository.save(RuntimeStats(value.serverId, value.runtime))
                 .flatMap { sendMessage(session, StatusResponseEvent(true)) }
     }
 }
