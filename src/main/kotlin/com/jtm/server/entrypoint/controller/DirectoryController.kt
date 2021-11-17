@@ -13,14 +13,14 @@ import java.util.*
 class DirectoryController @Autowired constructor(private val directoryService: DirectoryService) {
 
     @GetMapping("/{id}")
-    fun getDirectory(@PathVariable id: UUID): Mono<Directory> {
-        return directoryService.getDirectory(id)
+    fun getDirectory(@PathVariable id: UUID, @RequestParam("path", required = false) path: String?): Mono<Directory> {
+        return if (path != null) directoryService.getDirectoryPath(id, path) else directoryService.getDirectory(id)
     }
 
-    @GetMapping("/{id}/path")
-    fun getDirectoryPath(@PathVariable id: UUID, @RequestParam("path") path: String): Mono<Directory> {
-        return directoryService.getDirectoryPath(id, path)
-    }
+//    @GetMapping("/{id}/path")
+//    fun getDirectoryPath(@PathVariable id: UUID, @RequestParam("path") path: String): Mono<Directory> {
+//        return directoryService.getDirectoryPath(id, path)
+//    }
 
     @GetMapping("/all")
     fun getDirectories(): Flux<Directory> {
