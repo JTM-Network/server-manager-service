@@ -1,7 +1,7 @@
 package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.dto.DirectoryDto
-import com.jtm.server.core.domain.model.Directory
+import com.jtm.server.core.domain.entity.Directory
 import com.jtm.server.core.domain.model.event.impl.FetchDirectoryEvent
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.data.service.DirectoryService

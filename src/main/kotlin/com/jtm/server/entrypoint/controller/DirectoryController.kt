@@ -1,6 +1,6 @@
 package com.jtm.server.entrypoint.controller
 
-import com.jtm.server.core.domain.model.Directory
+import com.jtm.server.core.domain.entity.Directory
 import com.jtm.server.data.service.DirectoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
