@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 @Document("runtime_stats")
-data class RuntimeStats(@Id val id: Long = System.currentTimeMillis(), val serverId: UUID = UUID.randomUUID(), val cpuUsage: Double = 0.10, val memoryUsage: Long = 100000000, val maxMemory: Long = 100000000, val time: TimeType = TimeType.FIVE) {
+data class RuntimeStats(@Id val id: Long = System.currentTimeMillis(), val serverId: UUID = UUID.randomUUID(), val tps: Double = 20.0, val cpuUsage: Double = 0.10, val memoryUsage: Long = 100000000, val maxMemory: Long = 100000000, val time: TimeType = TimeType.FIVE) {
 
-    constructor(serverId: UUID, dto: RuntimeDto): this(id = dto.id, serverId = serverId, cpuUsage = dto.cpuUsage, memoryUsage = dto.memoryUsage, maxMemory = dto.maxMemory, time = dto.time)
-
-
+    constructor(serverId: UUID, dto: RuntimeDto): this(id = dto.id, serverId = serverId, tps = dto.tps, cpuUsage = dto.cpuUsage, memoryUsage = dto.memoryUsage, maxMemory = dto.maxMemory, time = dto.time)
 }
