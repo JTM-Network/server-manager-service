@@ -28,20 +28,6 @@ class DirectoryServiceTest {
     private val dir = Directory(UUID.randomUUID(), "test")
 
     @Test
-    fun addDirectory_thenFound() {
-        `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(dir))
-
-        val returned = directoryService.addDirectory(dir)
-
-        verify(directoryRepository, times(1)).findById(any(UUID::class.java))
-        verifyNoMoreInteractions(directoryRepository)
-
-        StepVerifier.create(returned)
-                .expectError(DirectoryFound::class.java)
-                .verify()
-    }
-
-    @Test
     fun addDirectory() {
         `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.empty())
         `when`(directoryRepository.save(anyOrNull())).thenReturn(Mono.just(dir))
