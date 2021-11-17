@@ -2,6 +2,7 @@ package com.jtm.server.entrypoint.controller
 
 import com.jtm.server.core.domain.constants.TimeType
 import com.jtm.server.core.domain.entity.RuntimeStats
+import com.jtm.server.core.usecase.sink.RuntimeSink
 import com.jtm.server.data.service.RuntimeService
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,6 +33,10 @@ class RuntimeControllerTest {
 
     @MockBean
     lateinit var runtimeService: RuntimeService
+
+    @MockBean
+    lateinit var runtimeSink: RuntimeSink
+
     private val runtime = RuntimeStats()
 
     @Test
