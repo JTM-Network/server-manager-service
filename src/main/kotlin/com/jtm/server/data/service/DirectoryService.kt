@@ -25,7 +25,10 @@ class DirectoryService @Autowired constructor(private val directoryRepository: D
     fun getDirectoryPath(serverId: UUID, path: String): Mono<Directory> {
         return directoryRepository.findById(serverId)
                 .switchIfEmpty(Mono.defer { Mono.error(DirectoryNotFound()) })
-                .map { it.findDirectory(path) }
+                .flatMap {
+                    val dir = it.findDirectory(path) ?: return@flatMap Mono.error { DirectoryNotFound() }
+                    return@flatMap Mono.just(dir)
+                }
     }
 
     fun getDirectories(): Flux<Directory> {

@@ -1,6 +1,7 @@
 package com.jtm.server.entrypoint.controller
 
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.model.DirectoryInfo
 import com.jtm.server.data.service.DirectoryService
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +31,7 @@ class DirectoryControllerTest {
     @MockBean
     lateinit var directoryService: DirectoryService
 
-    private val dir = Directory(UUID.randomUUID(), "test")
+    private val dir = Directory(UUID.randomUUID(), "test", info = DirectoryInfo(10, 20))
 
     @Test
     fun getDirectory() {

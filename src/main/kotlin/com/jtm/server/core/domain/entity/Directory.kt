@@ -12,14 +12,14 @@ data class Directory(@Id val serverId: UUID, val name: String, val directories: 
 
     constructor(serverId: UUID, dto: DirectoryDto): this(serverId = serverId, name = dto.name, directories = dto.directories, files = dto.files, info = dto.info)
 
-    fun findDirectory(path: String): Directory {
+    fun findDirectory(path: String): Directory? {
         val folders = path.split("/")
         var dir = this
-        for (folder in folders) if (folder.isNotBlank()) dir = dir.getDirectory(folder)
+        for (folder in folders) if (folder.isNotBlank()) dir = dir.getDirectory(folder) ?: return null
         return dir
     }
 
-    fun getDirectory(name: String): Directory {
-        return directories.first { it.name == name }
+    fun getDirectory(name: String): Directory? {
+        return directories.firstOrNull { it.name == name }
     }
 }

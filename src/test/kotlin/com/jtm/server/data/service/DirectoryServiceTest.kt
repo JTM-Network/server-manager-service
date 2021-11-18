@@ -3,6 +3,7 @@ package com.jtm.server.data.service
 import com.jtm.server.core.domain.exceptions.DirectoryFound
 import com.jtm.server.core.domain.exceptions.DirectoryNotFound
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.model.DirectoryInfo
 import com.jtm.server.core.usecase.repository.DirectoryRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -25,7 +26,7 @@ class DirectoryServiceTest {
 
     private val directoryRepository: DirectoryRepository = mock()
     private val directoryService = DirectoryService(directoryRepository)
-    private val dir = Directory(UUID.randomUUID(), "test")
+    private val dir = Directory(UUID.randomUUID(), "test", info = DirectoryInfo(10, 10))
 
     @Test
     fun addDirectory() {
