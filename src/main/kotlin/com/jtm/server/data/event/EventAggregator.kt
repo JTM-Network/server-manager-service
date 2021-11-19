@@ -19,6 +19,7 @@ class EventAggregator @Autowired constructor(private val context: ApplicationCon
         registerHandler(context.getBean(RuntimeStatEntryHandler::class.java))
         registerHandler(context.getBean(RuntimeStatStreamHandler::class.java))
         registerHandler(context.getBean(FetchDirectoryHandler::class.java))
+        registerHandler(context.getBean(FetchPluginsHandler::class.java))
     }
 
     fun registerHandler(handler: EventHandler<*>) {

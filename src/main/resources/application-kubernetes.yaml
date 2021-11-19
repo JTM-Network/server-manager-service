@@ -8,3 +8,6 @@ security:
   jwt:
     access-key: ${ACCESS_KEY}
     plugin-key: ${PLUGIN_KEY}
+
+path:
+  downloads: /downloads
