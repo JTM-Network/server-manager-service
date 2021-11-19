@@ -2,10 +2,9 @@ package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.dto.DirectoryDto
 import com.jtm.server.core.domain.entity.Directory
-import com.jtm.server.core.domain.model.event.impl.FetchDirectoryEvent
+import com.jtm.server.core.domain.model.event.impl.fetch.FetchDirectoryEvent
 import com.jtm.server.core.usecase.event.EventHandler
-import com.jtm.server.data.service.DirectoryService
-import org.slf4j.LoggerFactory
+import com.jtm.server.data.service.directory.DirectoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketMessage

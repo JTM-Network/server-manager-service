@@ -1,8 +1,8 @@
 package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.entity.Server
-import com.jtm.server.core.domain.model.event.impl.ConnectEvent
-import com.jtm.server.core.domain.model.event.impl.ConnectResponseEvent
+import com.jtm.server.core.domain.model.event.impl.connection.ConnectEvent
+import com.jtm.server.core.domain.model.event.impl.connection.ConnectResponseEvent
 import com.jtm.server.core.domain.model.socket.SocketSession
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.core.usecase.provider.TokenProvider

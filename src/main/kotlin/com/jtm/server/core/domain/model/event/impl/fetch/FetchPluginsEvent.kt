@@ -1,4 +1,4 @@
-package com.jtm.server.core.domain.model.event.impl
+package com.jtm.server.core.domain.model.event.impl.fetch
 
 import com.jtm.server.core.domain.model.plugin.Plugin
 import java.util.*

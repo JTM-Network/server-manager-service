@@ -1,9 +1,8 @@
-package com.jtm.server.data.service
+package com.jtm.server.data.service.plugin
 
 import com.jtm.server.core.domain.entity.ServerPlugins
 import com.jtm.server.core.domain.exceptions.ServerNotFound
 import com.jtm.server.core.usecase.repository.PluginRepository
-import com.jtm.server.data.service.plugin.PluginService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

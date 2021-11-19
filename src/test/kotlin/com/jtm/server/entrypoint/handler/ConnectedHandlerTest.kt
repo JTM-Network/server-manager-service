@@ -2,7 +2,7 @@ package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.entity.Server
 import com.jtm.server.core.domain.model.client.server.ServerInfo
-import com.jtm.server.core.domain.model.event.impl.ConnectEvent
+import com.jtm.server.core.domain.model.event.impl.connection.ConnectEvent
 import com.jtm.server.core.usecase.provider.TokenProvider
 import com.jtm.server.core.usecase.repository.SessionRepository
 import com.jtm.server.data.service.ServerService

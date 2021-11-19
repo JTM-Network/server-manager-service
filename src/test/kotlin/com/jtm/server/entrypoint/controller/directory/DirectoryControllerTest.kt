@@ -1,8 +1,9 @@
-package com.jtm.server.entrypoint.controller
+package com.jtm.server.entrypoint.controller.directory
 
 import com.jtm.server.core.domain.entity.Directory
-import com.jtm.server.core.domain.model.DirectoryInfo
-import com.jtm.server.data.service.DirectoryService
+import com.jtm.server.core.domain.model.directory.DirectoryInfo
+import com.jtm.server.data.service.directory.DirectoryService
+import com.jtm.server.entrypoint.controller.directory.DirectoryController
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`

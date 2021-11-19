@@ -1,4 +1,4 @@
-package com.jtm.server.data.service
+package com.jtm.server.data.service.directory
 
 import com.jtm.server.core.domain.entity.Directory
 import com.jtm.server.core.domain.exceptions.DirectoryNotFound

@@ -1,7 +1,7 @@
-package com.jtm.server.entrypoint.controller
+package com.jtm.server.entrypoint.controller.directory
 
 import com.jtm.server.core.domain.entity.Directory
-import com.jtm.server.data.service.DirectoryService
+import com.jtm.server.data.service.directory.DirectoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux

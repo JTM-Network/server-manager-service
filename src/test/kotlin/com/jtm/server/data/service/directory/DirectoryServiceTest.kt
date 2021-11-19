@@ -1,9 +1,8 @@
-package com.jtm.server.data.service
+package com.jtm.server.data.service.directory
 
-import com.jtm.server.core.domain.exceptions.DirectoryFound
 import com.jtm.server.core.domain.exceptions.DirectoryNotFound
 import com.jtm.server.core.domain.entity.Directory
-import com.jtm.server.core.domain.model.DirectoryInfo
+import com.jtm.server.core.domain.model.directory.DirectoryInfo
 import com.jtm.server.core.usecase.repository.DirectoryRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

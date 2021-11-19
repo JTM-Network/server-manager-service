@@ -1,4 +1,4 @@
-package com.jtm.server.entrypoint.controller
+package com.jtm.server.entrypoint.controller.plugin
 
 import com.jtm.server.core.domain.entity.ServerPlugins
 import com.jtm.server.data.service.plugin.PluginService
