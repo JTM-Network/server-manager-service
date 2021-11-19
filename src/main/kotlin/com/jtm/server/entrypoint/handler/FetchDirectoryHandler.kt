@@ -16,17 +16,9 @@ import java.util.*
 @Component
 class FetchDirectoryHandler @Autowired constructor(private val directoryService: DirectoryService): EventHandler<FetchDirectoryEvent>("fetch_directory", FetchDirectoryEvent::class.java) {
 
-    private val logger = LoggerFactory.getLogger(FetchDirectoryHandler::class.java)
-
     override fun onEvent(session: WebSocketSession, value: FetchDirectoryEvent): Mono<WebSocketMessage> {
-        logger.info("Fetch directory here.")
-        return try {
-            directoryService.addDirectory(constructDirectory(value.serverId, value.directory))
-                    .flatMap { Mono.empty() }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            Mono.empty()
-        }
+        return directoryService.addDirectory(constructDirectory(value.serverId, value.directory))
+                .flatMap { Mono.empty() }
     }
 
     private fun constructDirectory(serverId: UUID, dto: DirectoryDto): Directory {

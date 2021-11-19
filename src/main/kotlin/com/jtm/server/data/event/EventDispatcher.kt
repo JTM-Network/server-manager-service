@@ -16,11 +16,8 @@ class EventDispatcher @Autowired constructor(private val eventAggregator: EventA
     private val logger = LoggerFactory.getLogger(EventDispatcher::class.java)
 
     fun dispatch(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
-        logger.info("First")
         if (!authenticationManager.authenticate(event.token)) return session.close(CloseStatus.create(1015, "Failed authentication.")).then(Mono.empty())
-        logger.info("Second")
         val handler = eventAggregator.getHandler(event.name) ?: return session.close(CloseStatus.create(1020, "Failed to find event.")).then(Mono.empty())
-        logger.info("Third")
         return handler.handleEvent(session, event)
     }
 }
