@@ -9,6 +9,7 @@ import com.jtm.server.core.domain.model.event.impl.plugin.FileRequestEvent
 import com.jtm.server.core.usecase.FileHandler
 import com.jtm.server.core.usecase.repository.DownloadRequestRepository
 import com.jtm.server.core.usecase.sink.DownloadSink
+import com.jtm.server.core.usecase.sink.RequestSink
 import com.jtm.server.data.service.SessionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.codec.ServerSentEvent
@@ -19,17 +20,17 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @Service
-class DownloadService @Autowired constructor(private val sessionService: SessionService, private val requestRepository: DownloadRequestRepository, private val downloadSink: DownloadSink, private val fileHandler: FileHandler) {
+class DownloadService @Autowired constructor(private val sessionService: SessionService, private val requestRepository: DownloadRequestRepository, private val requestSink: RequestSink, private val fileHandler: FileHandler) {
 
-    fun addRequest(dto: DownloadRequestDto): Flux<ServerSentEvent<ServerUploadStatus>> {
+    fun addRequest(dto: DownloadRequestDto): Flux<ServerSentEvent<DownloadRequest>> {
         return requestRepository.save(DownloadRequest(dto))
                 .flatMap { sessionService.getSession(dto.serverId)
                         .flatMap { server -> server.sendEvent("file_request", FileRequestEvent(it.id, dto.path)) }
                         .thenReturn(it)
                 }
                 .flatMapMany {
-                    downloadSink.addDownloads(it.id)
-                    downloadSink.getDownloads(it.id)
+                    requestSink.addRequest(it.id)
+                    requestSink.getRequestUpdates(it.id)
                 }
     }
 

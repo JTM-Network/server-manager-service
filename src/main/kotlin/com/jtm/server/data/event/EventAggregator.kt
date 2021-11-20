@@ -4,6 +4,7 @@ import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.entrypoint.handler.*
 import com.jtm.server.entrypoint.handler.plugin.DisablePluginHandler
 import com.jtm.server.entrypoint.handler.plugin.EnablePluginHandler
+import com.jtm.server.entrypoint.handler.plugin.UploadCompleteHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
@@ -25,6 +26,7 @@ class EventAggregator @Autowired constructor(private val context: ApplicationCon
 
         registerHandler(context.getBean(EnablePluginHandler::class.java))
         registerHandler(context.getBean(DisablePluginHandler::class.java))
+        registerHandler(context.getBean(UploadCompleteHandler::class.java))
     }
 
     fun registerHandler(handler: EventHandler<*>) {

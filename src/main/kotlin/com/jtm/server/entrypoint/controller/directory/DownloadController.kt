@@ -18,7 +18,7 @@ import java.util.*
 class DownloadController @Autowired constructor(private val downloadService: DownloadService) {
 
     @PostMapping("/request")
-    fun addRequest(@RequestBody dto: DownloadRequestDto): Flux<ServerSentEvent<ServerUploadStatus>> {
+    fun addRequest(@RequestBody dto: DownloadRequestDto): Flux<ServerSentEvent<DownloadRequest>> {
         return downloadService.addRequest(dto)
     }
 
