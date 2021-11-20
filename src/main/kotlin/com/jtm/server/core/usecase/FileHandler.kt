@@ -5,10 +5,12 @@ import org.apache.commons.io.FileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.io.File
 import java.util.*
 
+@Component
 class FileHandler {
 
     private val logger = LoggerFactory.getLogger(FileHandler::class.java)
