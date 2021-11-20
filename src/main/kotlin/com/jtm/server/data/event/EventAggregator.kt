@@ -26,7 +26,7 @@ class EventAggregator @Autowired constructor(private val context: ApplicationCon
 
         registerHandler(context.getBean(EnablePluginHandler::class.java))
         registerHandler(context.getBean(DisablePluginHandler::class.java))
-        registerHandler(context.getBean(UploadCompleteHandler::class.java))
+//        registerHandler(context.getBean(UploadCompleteHandler::class.java))
     }
 
     fun registerHandler(handler: EventHandler<*>) {
