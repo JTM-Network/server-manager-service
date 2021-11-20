@@ -2,6 +2,8 @@ package com.jtm.server.data.event
 
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.entrypoint.handler.*
+import com.jtm.server.entrypoint.handler.plugin.DisablePluginHandler
+import com.jtm.server.entrypoint.handler.plugin.EnablePluginHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
@@ -20,6 +22,9 @@ class EventAggregator @Autowired constructor(private val context: ApplicationCon
         registerHandler(context.getBean(RuntimeStatStreamHandler::class.java))
         registerHandler(context.getBean(FetchDirectoryHandler::class.java))
         registerHandler(context.getBean(FetchPluginsHandler::class.java))
+
+        registerHandler(context.getBean(EnablePluginHandler::class.java))
+        registerHandler(context.getBean(DisablePluginHandler::class.java))
     }
 
     fun registerHandler(handler: EventHandler<*>) {
