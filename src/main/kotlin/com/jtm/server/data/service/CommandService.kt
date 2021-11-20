@@ -11,14 +11,9 @@ import java.util.*
 @Service
 class CommandService @Autowired constructor(private val sessionService: SessionService) {
 
-    private val logger = LoggerFactory.getLogger(CommandService::class.java)
-
     fun sendCommand(dto: CommandDto): Mono<Void> {
-        logger.info("Received command.")
         return sessionService.getSession(UUID.fromString(dto.serverId))
-                .flatMap {
-                    it.sendEvent("send_command", Command(dto.command))
-                }
+                .flatMap { it.sendEvent("send_command", Command(dto.command)) }
                 .then()
     }
 }
