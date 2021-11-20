@@ -22,15 +22,14 @@ import java.util.*
 @Service
 class DownloadService @Autowired constructor(private val sessionService: SessionService, private val requestRepository: DownloadRequestRepository, private val requestSink: RequestSink, private val fileHandler: FileHandler) {
 
-    fun addRequest(dto: DownloadRequestDto): Flux<ServerSentEvent<DownloadRequest>> {
+    fun addRequest(dto: DownloadRequestDto): Mono<DownloadRequest> {
         return requestRepository.save(DownloadRequest(dto))
                 .flatMap { sessionService.getSession(dto.serverId)
-                        .flatMap { server -> server.sendEvent("file_request", FileRequestEvent(it.id, dto.path)) }
+                        .flatMap { server ->
+                            requestSink.addRequest(it.id)
+                            server.sendEvent("file_request", FileRequestEvent(it.id, dto.path))
+                        }
                         .thenReturn(it)
-                }
-                .flatMapMany {
-                    requestSink.addRequest(it.id)
-                    requestSink.getRequestUpdates(it.id)
                 }
     }
 
@@ -44,6 +43,10 @@ class DownloadService @Autowired constructor(private val sessionService: Session
 
     fun clearDownloads(id: UUID): Mono<Void> {
         return fileHandler.clearDownloads(id)
+    }
+
+    fun getRequestStream(id: UUID): Flux<ServerSentEvent<DownloadRequest>> {
+        return requestSink.getRequestUpdates(id)
     }
 
     fun getRequest(id: UUID): Mono<DownloadRequest> {

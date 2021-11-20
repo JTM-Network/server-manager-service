@@ -18,8 +18,13 @@ import java.util.*
 class DownloadController @Autowired constructor(private val downloadService: DownloadService) {
 
     @PostMapping("/request")
-    fun addRequest(@RequestBody dto: DownloadRequestDto): Flux<ServerSentEvent<DownloadRequest>> {
+    fun addRequest(@RequestBody dto: DownloadRequestDto): Mono<DownloadRequest> {
         return downloadService.addRequest(dto)
+    }
+
+    @GetMapping("/request/{id}")
+    fun getRequestStream(@PathVariable id: UUID): Flux<ServerSentEvent<DownloadRequest>> {
+        return downloadService.getRequestStream(id)
     }
 
     @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
