@@ -16,14 +16,14 @@ class PluginCommandService @Autowired constructor(private val sessionService: Se
     fun enableCmd(dto: PluginCommandDto): Mono<Void> {
         return sessionService.getSession(UUID.fromString(dto.serverId))
                 .switchIfEmpty(Mono.defer { Mono.error(ServerOffline()) })
-                .flatMap { it.sendEvent("enable_plugin", EnablePluginEvent(dto.name)) }
+                .flatMap { it.sendEvent("enable_plugin", EnablePluginEvent(UUID.fromString(dto.serverId), dto.name)) }
                 .then()
     }
 
     fun disableCmd(dto: PluginCommandDto): Mono<Void> {
         return sessionService.getSession(UUID.fromString(dto.serverId))
                 .switchIfEmpty(Mono.defer { Mono.error(ServerOffline()) })
-                .flatMap { it.sendEvent("disable_plugin", DisablePluginEvent(dto.name)) }
+                .flatMap { it.sendEvent("disable_plugin", DisablePluginEvent(UUID.fromString(dto.serverId), dto.name)) }
                 .then()
     }
 }
