@@ -17,8 +17,10 @@ class RequestSink {
     private val logger = LoggerFactory.getLogger(RequestSink::class.java)
     private val requestSinks: MutableMap<UUID, Sinks.Many<DownloadRequest>> = HashMap()
 
-    fun addRequest(id: UUID) {
-        requestSinks[id] = Sinks.many().multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false)
+    fun addRequest(id: UUID): Sinks.Many<DownloadRequest> {
+        val sink: Sinks.Many<DownloadRequest> = Sinks.many().multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false)
+        requestSinks[id] = sink
+        return sink
     }
 
     fun getRequestUpdates(id: UUID): Flux<ServerSentEvent<DownloadRequest>> {
@@ -27,8 +29,9 @@ class RequestSink {
     }
 
     fun sendMessage(request: DownloadRequest) {
-        val sink = requestSinks[request.id] ?: return
-        val result = sink.tryEmitNext(request) ?: return
-        if (result.isFailure) logger.error("Failed to sen message.")
+        logger.info("Sending message of request.")
+        val sink = requestSinks[request.id] ?: addRequest(request.id)
+        val result = sink.tryEmitNext(request)
+        if (result.isFailure) logger.error("Failed to send message: ${result.name}")
     }
 }
