@@ -1,3 +1,5 @@
 package com.jtm.server.core.domain.model
 
-data class ServerUploadStatus(val progress: Double)
+import java.util.*
+
+data class ServerUploadStatus(val serverId: UUID, val progress: Double)
