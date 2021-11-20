@@ -3,6 +3,7 @@ package com.jtm.server.data.service.plugin
 import com.jtm.server.core.domain.entity.ServerPlugins
 import com.jtm.server.core.domain.exceptions.ServerNotFound
 import com.jtm.server.core.usecase.repository.PluginRepository
+import com.jtm.server.core.usecase.sink.PluginSink
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +24,8 @@ import java.util.*
 class PluginServiceTest {
 
     private val pluginRepository: PluginRepository = mock()
-    private val pluginService = PluginService(pluginRepository)
+    private val pluginSink: PluginSink = mock()
+    private val pluginService = PluginService(pluginRepository, pluginSink)
     private val plugins = ServerPlugins(UUID.randomUUID())
 
     @Test
