@@ -22,7 +22,7 @@ class DownloadController @Autowired constructor(private val downloadService: Dow
         return downloadService.addRequest(dto)
     }
 
-    @GetMapping("/request/{id}")
+    @GetMapping("/request/{id}", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getRequestStream(@PathVariable id: UUID): Flux<ServerSentEvent<DownloadRequest>> {
         return downloadService.getRequestStream(id)
     }
