@@ -4,6 +4,7 @@ import com.jtm.server.core.domain.constants.DownloadStatus
 import com.jtm.server.core.domain.dto.DownloadRequestDto
 import com.jtm.server.core.domain.entity.DownloadRequest
 import com.jtm.server.core.domain.exceptions.DownloadRequestNotFound
+import com.jtm.server.core.domain.exceptions.FileNotFound
 import com.jtm.server.core.domain.model.ServerUploadStatus
 import com.jtm.server.core.domain.model.event.impl.plugin.FileRequestEvent
 import com.jtm.server.core.usecase.FileHandler
@@ -12,8 +13,12 @@ import com.jtm.server.core.usecase.sink.DownloadSink
 import com.jtm.server.core.usecase.sink.RequestSink
 import com.jtm.server.data.service.SessionService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.http.server.reactive.ServerHttpResponse
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -39,6 +44,19 @@ class DownloadService @Autowired constructor(private val sessionService: Session
                         .flatMap { requestRepository.save(request.updateStatus(DownloadStatus.SERVER_UPLOAD)).then() }
                 }
 
+    }
+
+    fun getDownload(id: UUID, response: ServerHttpResponse): Mono<Resource> {
+        return requestRepository.findById(id)
+                .flatMap { request ->
+                    fileHandler.fetch("${request.id}/${request.file}")
+                            .flatMap { file ->
+                                if (!file.exists()) return@flatMap Mono.error(FileNotFound())
+                                response.headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name}")
+                                return@flatMap Mono.just(FileSystemResource(file))
+                            }
+                            .flatMap { requestRepository.save(request.updateStatus(DownloadStatus.COMPLETED)).thenReturn(it) }
+                }
     }
 
     fun clearDownloads(id: UUID): Mono<Void> {
