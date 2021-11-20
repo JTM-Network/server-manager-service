@@ -21,7 +21,7 @@ class UploadCompleteHandler @Autowired constructor(private val requestRepository
         logger.info("Download request update received.")
         return requestRepository.findById(value.id)
                 .flatMap { requestRepository.save(it.updateStatus(DownloadStatus.DOWNLOAD_AVAILABLE))
-                        .flatMap { Mono.just(requestSink.sendMessage(it)) }
+                        .map { requestSink.sendMessage(it) }
                         .then(Mono.empty())
                 }
     }
