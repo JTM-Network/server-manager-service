@@ -31,10 +31,10 @@ class FileHandler {
         return Mono.just(file)
     }
 
-    fun clearDownloads(id: UUID): Mono<Void> {
-        val folder = File("$downloadPath/$id")
+    fun clearDownloads(): Mono<Void> {
+        val folder = File(downloadPath)
         if (!folder.exists()) return Mono.error { FileNotFound() }
-        FileUtils.deleteDirectory(folder)
+        for (file in folder.listFiles()) FileUtils.forceDelete(file)
         return Mono.empty()
     }
 }

@@ -59,8 +59,8 @@ class DownloadService @Autowired constructor(private val sessionService: Session
                 }
     }
 
-    fun clearDownloads(id: UUID): Mono<Void> {
-        return fileHandler.clearDownloads(id)
+    fun clearDownloads(): Mono<Void> {
+        return fileHandler.clearDownloads()
     }
 
     fun getRequestStream(id: UUID): Flux<ServerSentEvent<DownloadRequest>> {

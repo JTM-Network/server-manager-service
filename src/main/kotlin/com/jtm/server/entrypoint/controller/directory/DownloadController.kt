@@ -39,9 +39,9 @@ class DownloadController @Autowired constructor(private val downloadService: Dow
         return downloadService.getDownload(id, response)
     }
 
-    @GetMapping("/{id}/clear")
-    fun clearDownloads(@PathVariable id: UUID): Mono<Void> {
-        return downloadService.clearDownloads(id)
+    @GetMapping("/clear")
+    fun clearDownloads(): Mono<Void> {
+        return downloadService.clearDownloads()
     }
 
     @GetMapping("/{id}")
