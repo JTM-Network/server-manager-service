@@ -15,8 +15,8 @@ import java.util.*
 @RequestMapping("/dir/upload")
 class UploadController @Autowired constructor(private val uploadService: UploadService) {
 
-    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun upload(@RequestPart("file") file: FilePart, @RequestPart("serverId") serverId: UUID, @RequestPart("path") path: String): Mono<UploadRequest> {
+    @PostMapping("/{serverId}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun upload(@PathVariable serverId: UUID, @RequestPart("file") file: FilePart, @RequestPart("path") path: String): Mono<UploadRequest> {
         return uploadService.upload(serverId, path, file)
     }
 
