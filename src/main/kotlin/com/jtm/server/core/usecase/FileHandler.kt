@@ -31,6 +31,13 @@ class FileHandler {
         return Mono.just(file)
     }
 
+    fun delete(path: String): Mono<Void> {
+        val file = File("$downloadPath/$path")
+        if (!file.exists()) return Mono.error { FileNotFound() }
+        FileUtils.forceDelete(file)
+        return Mono.empty()
+    }
+
     fun clearDownloads(): Mono<Void> {
         val folder = File(downloadPath)
         if (!folder.exists()) return Mono.error { FileNotFound() }

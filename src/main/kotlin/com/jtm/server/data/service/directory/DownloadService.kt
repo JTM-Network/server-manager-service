@@ -55,7 +55,11 @@ class DownloadService @Autowired constructor(private val sessionService: Session
                                 response.headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name}")
                                 return@flatMap Mono.just(FileSystemResource(file))
                             }
-                            .flatMap { requestRepository.save(request.updateStatus(DownloadStatus.COMPLETED)).thenReturn(it) }
+                            .flatMap {
+                                requestRepository.save(request.updateStatus(DownloadStatus.COMPLETED))
+                                        .flatMap { request -> fileHandler.delete("/${request.id}/${request.file}") }
+                                        .thenReturn(it)
+                            }
                 }
     }
 
