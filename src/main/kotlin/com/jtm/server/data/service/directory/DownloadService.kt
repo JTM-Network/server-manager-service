@@ -57,7 +57,6 @@ class DownloadService @Autowired constructor(private val sessionService: Session
                             }
                             .flatMap {
                                 requestRepository.save(request.updateStatus(DownloadStatus.COMPLETED))
-                                        .flatMap { request -> fileHandler.delete("/${request.id}/${request.file}") }
                                         .thenReturn(it)
                             }
                 }

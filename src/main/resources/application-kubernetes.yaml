@@ -11,3 +11,4 @@ security:
 
 path:
   downloads: /downloads
+  uploads: /uploads

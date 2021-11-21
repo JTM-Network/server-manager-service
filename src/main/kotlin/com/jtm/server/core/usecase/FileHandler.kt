@@ -18,6 +18,9 @@ class FileHandler {
     @Value("\${path.downloads:/downloads}")
     lateinit var downloadPath: String
 
+    @Value("\${path.uploads:/uploads}")
+    lateinit var uploadPath: String
+
     fun save(path: String, name: String, filePart: FilePart): Mono<Void> {
         val folder = File("$downloadPath/$path")
         if (!folder.exists() && folder.mkdirs()) logger.info("Created directories at: $path")
@@ -33,6 +36,26 @@ class FileHandler {
 
     fun delete(path: String): Mono<Void> {
         val file = File("$downloadPath/$path")
+        if (!file.exists()) return Mono.error { FileNotFound() }
+        FileUtils.forceDelete(file)
+        return Mono.empty()
+    }
+
+    fun saveUpload(path: String, name: String, filePart: FilePart): Mono<Void> {
+        val folder = File("$uploadPath/$path")
+        if (!folder.exists() && folder.mkdirs()) logger.info("Created directories at: $path")
+        val file = File("$uploadPath/$path", name)
+        return filePart.transferTo(file)
+    }
+
+    fun fetchUpload(path: String): Mono<File> {
+        val file = File("$uploadPath/$path")
+        if (!file.exists()) return Mono.error { FileNotFound() }
+        return Mono.just(file)
+    }
+
+    fun deleteUpload(path: String): Mono<Void> {
+        val file = File("$uploadPath/$path")
         if (!file.exists()) return Mono.error { FileNotFound() }
         FileUtils.forceDelete(file)
         return Mono.empty()
