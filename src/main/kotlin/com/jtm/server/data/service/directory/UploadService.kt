@@ -24,8 +24,8 @@ class UploadService @Autowired constructor(private val uploadRequestRepository: 
         return uploadRequestRepository.save(UploadRequest(serverId = serverId, path = path, file = file.filename()))
                 .flatMap { uploadRequest ->
                     sessionService.getSession(serverId)
+                            .flatMap { fileHandler.saveUpload(uploadRequest.id.toString(), uploadRequest.file, file).thenReturn(it) }
                             .flatMap { it.sendEvent("download_request", DownloadRequestEvent(uploadRequest.id, serverId, path)) }
-                            .flatMap { fileHandler.saveUpload(uploadRequest.id.toString(), uploadRequest.file, file) }
                             .thenReturn(uploadRequest)
                 }
     }
