@@ -25,7 +25,7 @@ class DirectoryServiceTest {
 
     private val directoryRepository: DirectoryRepository = mock()
     private val directoryService = DirectoryService(directoryRepository)
-    private val dir = Directory(UUID.randomUUID(), "test", info = DirectoryInfo(10, 10))
+    private val dir = Directory(UUID.randomUUID(), "test")
 
     @Test
     fun addDirectory() {

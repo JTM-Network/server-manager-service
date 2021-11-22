@@ -32,7 +32,7 @@ class DirectoryControllerTest {
     @MockBean
     lateinit var directoryService: DirectoryService
 
-    private val dir = Directory(UUID.randomUUID(), "test", info = DirectoryInfo(10, 20))
+    private val dir = Directory(UUID.randomUUID(), "test")
 
     @Test
     fun getDirectory() {
