@@ -5,6 +5,7 @@ import com.jtm.server.core.domain.entity.Directory
 import com.jtm.server.core.domain.model.event.impl.fetch.FetchDirectoryEvent
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.data.service.directory.DirectoryService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketMessage
@@ -16,8 +17,13 @@ import java.util.*
 class FetchDirectoryHandler @Autowired constructor(private val directoryService: DirectoryService): EventHandler<FetchDirectoryEvent>("fetch_directory", FetchDirectoryEvent::class.java) {
 
     override fun onEvent(session: WebSocketSession, value: FetchDirectoryEvent): Mono<WebSocketMessage> {
-        return directoryService.addDirectory(constructDirectory(value.serverId, value.directory))
-                .then(Mono.empty())
+        return try {
+            directoryService.addDirectory(constructDirectory(value.serverId, value.directory))
+                    .then(Mono.empty())
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            Mono.empty()
+        }
     }
 
     private fun constructDirectory(serverId: UUID, dto: DirectoryDto): Directory {
