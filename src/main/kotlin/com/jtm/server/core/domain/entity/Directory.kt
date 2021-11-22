@@ -10,7 +10,7 @@ import java.util.*
 @Document("directories")
 data class Directory(@Id val serverId: UUID, val name: String, val directories: MutableList<Directory> = mutableListOf(), val files: MutableList<File> = mutableListOf(), val folders: Int = 0, val filesLength: Int = 0) {
 
-    constructor(serverId: UUID, dto: DirectoryDto): this(serverId = serverId, name = dto.name)
+    constructor(serverId: UUID, dto: DirectoryDto): this(serverId = serverId, name = dto.name, directories = dto.directories)
 
     fun findDirectory(path: String): Directory? {
         val folders = path.split("/")
