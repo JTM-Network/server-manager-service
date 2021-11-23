@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketHandler
 import org.springframework.web.reactive.socket.WebSocketSession
 import reactor.core.publisher.Mono
+import reactor.core.publisher.SignalType
 
 @Component
 class ServerSocketHandler @Autowired constructor(private val eventDispatcher: EventDispatcher, private val sessionRepository: SessionRepository, private val logRepository: LogRepository): WebSocketHandler {
@@ -24,6 +25,7 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(session.receive()
                 .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) }
+                .onErrorContinue { throwable, any -> logger.error("Error: ${throwable.message}")  }
                 .doFinally {
                     session.close()
                     val socketSession = sessionRepository.removeSessionId(session.id) ?: return@doFinally
