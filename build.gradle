@@ -2,6 +2,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.palantir.docker" version "0.30.0"
+    id 'com.palantir.docker-run' version "0.30.0"
 }
 
 group 'com.jtm.server'
@@ -50,4 +52,22 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+}
+
+docker {
+    name "${project.name}:${project.version}"
+    tags 'latest'
+    dockerfile file('LocalDockerfile')
+    files tasks.build.outputs, "build/libs/${bootJar.archiveFileName.get()}"
+    buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
+    pull true
+    noCache true
+}
+
+dockerRun {
+    name "${project.name}"
+    image  "${project.name}:${project.version}"
+    ports '8999:8999'
+    volumes '/home/michelle/Documents/Server Manage Volumes/Downloads': '/downloads', '/home/michelle/Documents/Server Manage Volumes/Uploads': '/uploads'
+    env 'PROFILE': 'dev'
 }

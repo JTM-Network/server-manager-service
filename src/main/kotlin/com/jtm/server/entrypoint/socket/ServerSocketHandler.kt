@@ -25,9 +25,7 @@ class ServerSocketHandler @Autowired constructor(private val eventDispatcher: Ev
     override fun handle(session: WebSocketSession): Mono<Void> {
         return session.send(session.receive()
                 .flatMap { eventDispatcher.dispatch(session, mapper.readValue(it.payloadAsText, IncomingEvent::class.java)) }
-                .doOnError { logger.error("Error: ${it.message}") }
                 .doFinally {
-                    if (it.equals(SignalType.ON_ERROR)) logger.info("Error found.")
                     session.close()
                     val socketSession = sessionRepository.removeSessionId(session.id) ?: return@doFinally
                     logRepository.removeLog(socketSession.id)

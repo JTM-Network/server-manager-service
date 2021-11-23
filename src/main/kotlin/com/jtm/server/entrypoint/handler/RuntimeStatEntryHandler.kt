@@ -5,7 +5,6 @@ import com.jtm.server.core.domain.model.event.impl.RuntimeEntryEvent
 import com.jtm.server.core.domain.model.event.impl.StatusResponseEvent
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.core.usecase.repository.RuntimeStatsRepository
-import io.kubernetes.client.extended.event.legacy.EventAggregator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketMessage
