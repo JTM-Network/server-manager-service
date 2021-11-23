@@ -15,6 +15,7 @@ class DirectoryService @Autowired constructor(private val directoryRepository: D
 
     fun addDirectory(dir: DirectoryEntity): Mono<DirectoryEntity> {
         return directoryRepository.findById(dir.serverId)
+                .flatMap { directoryRepository.save(dir) }
                 .switchIfEmpty(Mono.defer { directoryRepository.save(dir) })
     }
 
