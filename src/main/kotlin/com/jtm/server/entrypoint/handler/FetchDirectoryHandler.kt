@@ -2,6 +2,7 @@ package com.jtm.server.entrypoint.handler
 
 import com.jtm.server.core.domain.dto.DirectoryDto
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.entity.DirectoryEntity
 import com.jtm.server.core.domain.model.event.impl.fetch.FetchDirectoryEvent
 import com.jtm.server.core.usecase.event.EventHandler
 import com.jtm.server.data.service.directory.DirectoryService
@@ -21,7 +22,7 @@ class FetchDirectoryHandler @Autowired constructor(private val directoryService:
                 .then(Mono.empty())
     }
 
-    private fun constructDirectory(serverId: UUID, dto: DirectoryDto): Directory {
-        return Directory(serverId, dto)
+    private fun constructDirectory(serverId: UUID, dto: DirectoryDto): DirectoryEntity {
+        return DirectoryEntity(serverId, dto.name, dto.root, dto.date)
     }
 }

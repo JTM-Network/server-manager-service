@@ -1,6 +1,7 @@
 package com.jtm.server.entrypoint.controller.directory
 
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.entity.DirectoryEntity
 import com.jtm.server.core.domain.model.directory.DirectoryInfo
 import com.jtm.server.data.service.directory.DirectoryService
 import com.jtm.server.entrypoint.controller.directory.DirectoryController
@@ -32,18 +33,18 @@ class DirectoryControllerTest {
     @MockBean
     lateinit var directoryService: DirectoryService
 
-    private val dir = Directory(UUID.randomUUID(), "test")
+    private val dir = Directory("test", date = System.currentTimeMillis())
+    private val entity = DirectoryEntity(UUID.randomUUID(), "test", dir, System.currentTimeMillis())
 
     @Test
     fun getDirectory() {
-        `when`(directoryService.getDirectory(anyOrNull())).thenReturn(Mono.just(dir))
+        `when`(directoryService.getDirectory(anyOrNull())).thenReturn(Mono.just(entity))
 
         testClient.get()
                 .uri("/dir/${UUID.randomUUID()}")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$.serverId").isEqualTo(dir.serverId.toString())
                 .jsonPath("$.name").isEqualTo("test")
 
         verify(directoryService, times(1)).getDirectory(anyOrNull())
@@ -52,14 +53,14 @@ class DirectoryControllerTest {
 
     @Test
     fun getDirectories() {
-        `when`(directoryService.getDirectories()).thenReturn(Flux.just(dir))
+        `when`(directoryService.getDirectories()).thenReturn(Flux.just(entity))
 
         testClient.get()
                 .uri("/dir/all")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$[0].serverId").isEqualTo(dir.serverId.toString())
+                .jsonPath("$[0].serverId").isEqualTo(entity.serverId.toString())
                 .jsonPath("$[0].name").isEqualTo("test")
 
         verify(directoryService, times(1)).getDirectories()
@@ -68,14 +69,14 @@ class DirectoryControllerTest {
 
     @Test
     fun deleteDirectory() {
-        `when`(directoryService.removeDirectory(anyOrNull())).thenReturn(Mono.just(dir))
+        `when`(directoryService.removeDirectory(anyOrNull())).thenReturn(Mono.just(entity))
 
         testClient.delete()
                 .uri("/dir/${UUID.randomUUID()}")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .jsonPath("$.serverId").isEqualTo(dir.serverId.toString())
+                .jsonPath("$.serverId").isEqualTo(entity.serverId.toString())
                 .jsonPath("$.name").isEqualTo("test")
 
         verify(directoryService, times(1)).removeDirectory(anyOrNull())

@@ -1,6 +1,7 @@
 package com.jtm.server.entrypoint.controller.directory
 
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.entity.DirectoryEntity
 import com.jtm.server.data.service.directory.DirectoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -14,16 +15,16 @@ class DirectoryController @Autowired constructor(private val directoryService: D
 
     @GetMapping("/{id}")
     fun getDirectory(@PathVariable id: UUID, @RequestParam("path", required = false) path: String?): Mono<Directory> {
-        return if (path != null) directoryService.getDirectoryPath(id, path) else directoryService.getDirectory(id)
+        return if (path != null) directoryService.getDirectoryPath(id, path) else directoryService.getDirectory(id).map { it.dir }
     }
 
     @GetMapping("/all")
-    fun getDirectories(): Flux<Directory> {
+    fun getDirectories(): Flux<DirectoryEntity> {
         return directoryService.getDirectories()
     }
 
     @DeleteMapping("/{id}")
-    fun deleteDirectory(@PathVariable id: UUID): Mono<Directory> {
+    fun deleteDirectory(@PathVariable id: UUID): Mono<DirectoryEntity> {
         return directoryService.removeDirectory(id)
     }
 }

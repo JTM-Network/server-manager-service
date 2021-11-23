@@ -2,6 +2,7 @@ package com.jtm.server.data.service.directory
 
 import com.jtm.server.core.domain.exceptions.DirectoryNotFound
 import com.jtm.server.core.domain.entity.Directory
+import com.jtm.server.core.domain.entity.DirectoryEntity
 import com.jtm.server.core.domain.model.directory.DirectoryInfo
 import com.jtm.server.core.usecase.repository.DirectoryRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -25,21 +26,22 @@ class DirectoryServiceTest {
 
     private val directoryRepository: DirectoryRepository = mock()
     private val directoryService = DirectoryService(directoryRepository)
-    private val dir = Directory(UUID.randomUUID(), "test")
+    private val dir = Directory("test", date = System.currentTimeMillis())
+    private val entity = DirectoryEntity(UUID.randomUUID(), "test", dir, System.currentTimeMillis())
 
     @Test
     fun addDirectory() {
         `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.empty())
-        `when`(directoryRepository.save(anyOrNull())).thenReturn(Mono.just(dir))
+        `when`(directoryRepository.save(anyOrNull())).thenReturn(Mono.just(entity))
 
-        val returned = directoryService.addDirectory(dir)
+        val returned = directoryService.addDirectory(entity)
 
         verify(directoryRepository, times(1)).findById(any(UUID::class.java))
         verifyNoMoreInteractions(directoryRepository)
 
         StepVerifier.create(returned)
                 .assertNext {
-                    assertThat(it.serverId).isEqualTo(dir.serverId)
+                    assertThat(it.serverId).isEqualTo(entity.serverId)
                     assertThat(it.name).isEqualTo("test")
                 }
                 .verifyComplete()
@@ -61,7 +63,7 @@ class DirectoryServiceTest {
 
     @Test
     fun getDirectory() {
-        `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(dir))
+        `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(entity))
 
         val returned = directoryService.getDirectory(UUID.randomUUID())
 
@@ -70,7 +72,7 @@ class DirectoryServiceTest {
 
         StepVerifier.create(returned)
                 .assertNext {
-                    assertThat(it.serverId).isEqualTo(dir.serverId)
+                    assertThat(it.serverId).isEqualTo(entity.serverId)
                     assertThat(it.name).isEqualTo("test")
                 }
                 .verifyComplete()
@@ -78,7 +80,7 @@ class DirectoryServiceTest {
 
     @Test
     fun getDirectories() {
-        `when`(directoryRepository.findAll()).thenReturn(Flux.just(dir))
+        `when`(directoryRepository.findAll()).thenReturn(Flux.just(entity))
 
         val returned = directoryService.getDirectories()
 
@@ -87,7 +89,7 @@ class DirectoryServiceTest {
 
         StepVerifier.create(returned)
                 .assertNext {
-                    assertThat(it.serverId).isEqualTo(dir.serverId)
+                    assertThat(it.serverId).isEqualTo(entity.serverId)
                     assertThat(it.name).isEqualTo("test")
                 }
                 .verifyComplete()
@@ -109,7 +111,7 @@ class DirectoryServiceTest {
 
     @Test
     fun removeDirectory() {
-        `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(dir))
+        `when`(directoryRepository.findById(any(UUID::class.java))).thenReturn(Mono.just(entity))
         `when`(directoryRepository.delete(anyOrNull())).thenReturn(Mono.empty())
 
         val returned = directoryService.removeDirectory(UUID.randomUUID())
@@ -119,7 +121,7 @@ class DirectoryServiceTest {
 
         StepVerifier.create(returned)
                 .assertNext {
-                    assertThat(it.serverId).isEqualTo(dir.serverId)
+                    assertThat(it.serverId).isEqualTo(entity.serverId)
                     assertThat(it.name).isEqualTo("test")
                 }
                 .verifyComplete()
