@@ -13,8 +13,6 @@ import reactor.core.publisher.Mono
 @Component
 class EventDispatcher @Autowired constructor(private val eventAggregator: EventAggregator, private val authenticationManager: AuthenticationManager) {
 
-    private val logger = LoggerFactory.getLogger(EventDispatcher::class.java)
-
     fun dispatch(session: WebSocketSession, event: IncomingEvent): Mono<WebSocketMessage> {
         if (!authenticationManager.authenticate(event.token)) return session.close(CloseStatus.create(1015, "Failed authentication.")).then(Mono.empty())
         val handler = eventAggregator.getHandler(event.name) ?: return session.close(CloseStatus.create(1020, "Failed to find event.")).then(Mono.empty())
