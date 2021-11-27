@@ -25,9 +25,9 @@ import reactor.core.publisher.Mono
 import java.util.*
 
 @Service
-class DownloadService @Autowired constructor(private val sessionService: SessionService, private val requestRepository: DownloadRequestRepository, private val requestSink: RequestSink, private val fileHandler: FileHandler) {
+class DownloadService @Autowired constructor(private val requestRepository: DownloadRequestRepository, private val requestSink: RequestSink, private val fileHandler: FileHandler) {
 
-    fun addRequest(dto: DownloadRequestDto): Mono<DownloadRequest> {
+    fun addRequest(dto: DownloadRequestDto, sessionService: SessionService): Mono<DownloadRequest> {
         return requestRepository.save(DownloadRequest(dto))
                 .flatMap { sessionService.getSession(dto.serverId)
                         .flatMap { server ->

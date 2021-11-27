@@ -3,6 +3,7 @@ package com.jtm.server.entrypoint.controller.directory
 import com.jtm.server.core.domain.dto.DownloadRequestDto
 import com.jtm.server.core.domain.entity.DownloadRequest
 import com.jtm.server.core.domain.model.ServerUploadStatus
+import com.jtm.server.data.service.SessionService
 import com.jtm.server.data.service.directory.DownloadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
@@ -17,11 +18,11 @@ import java.util.*
 
 @RestController
 @RequestMapping("/dir/download")
-class DownloadController @Autowired constructor(private val downloadService: DownloadService) {
+class DownloadController @Autowired constructor(private val downloadService: DownloadService, private val sessionService: SessionService) {
 
     @PostMapping("/request")
     fun addRequest(@RequestBody dto: DownloadRequestDto): Mono<DownloadRequest> {
-        return downloadService.addRequest(dto)
+        return downloadService.addRequest(dto, sessionService)
     }
 
     @GetMapping("/request/{id}/stream", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
